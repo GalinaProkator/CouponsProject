@@ -3,8 +3,6 @@ package com.galina.coupons.beans;
 import com.galina.coupons.enums.CouponCategory;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Locale;
 
 public class Coupon {
     private Long id;

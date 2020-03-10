@@ -1,11 +1,9 @@
 package com.galina.coupons.dao;
 
 import com.galina.coupons.beans.Coupon;
-import com.galina.coupons.beans.Customer;
 import com.galina.coupons.enums.CouponCategory;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class CouponsDao {
     public void addCoupon (Coupon coupon){
@@ -14,7 +12,7 @@ public class CouponsDao {
 
     public Coupon[] getAllCoupons(){
         LocalDate startDate1 = LocalDate.of(2020,1,1);
-        LocalDate endDate1 = LocalDate.of(2020,3,12);
+        LocalDate endDate1 = LocalDate.of(2020,3,23);
         LocalDate startDate2 = LocalDate.of(2020,1,1);
         LocalDate endDate2 = LocalDate.of(2020,23,12);
         LocalDate startDate3 = LocalDate.of(2020,1,1);
@@ -40,6 +38,10 @@ public class CouponsDao {
         coupons[2] = coupon3;
 
         return coupons;
+    }
+
+    public boolean isCouponExists (String couponTitle){
+        return false;
     }
 
 
