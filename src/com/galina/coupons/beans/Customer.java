@@ -6,6 +6,8 @@ public class Customer {
     private String customerEmail;
     private String customerPhone;
 
+    private User user;
+
     public Customer(String customerName, String customerEmail, String customerPhone) {
         this.customerName = customerName;
         this.customerEmail = customerEmail;
@@ -21,11 +23,11 @@ public class Customer {
     }
 
     public Long getId() {
-        return id;
+        return user.getId();
     }
 
     public void setId(Long id) {
-        this.id = id;
+        user.setId(id);
     }
 
     public String getCustomerName() {
