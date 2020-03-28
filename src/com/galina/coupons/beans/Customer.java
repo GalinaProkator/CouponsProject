@@ -2,11 +2,10 @@ package com.galina.coupons.beans;
 
 public class Customer {
     private Long id;
+    private User user;
     private String customerName;
     private String customerEmail;
     private String customerPhone;
-
-    private User user;
 
     public Customer(String customerName, String customerEmail, String customerPhone) {
         this.customerName = customerName;
@@ -23,7 +22,7 @@ public class Customer {
     }
 
     public Long getId() {
-        return user.getId();
+        return this.user.getId();
     }
 
     public void setId(Long id) {
