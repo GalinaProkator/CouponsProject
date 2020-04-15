@@ -2,7 +2,7 @@ package com.galina.coupons.enums;
 
 public enum CouponCategory {
     GOODS("Goods"),
-    HOTELSANDTRAVEL("Hotels and travel"),
+    HOTELS_AND_TRAVEL("Hotels and travel"),
     HORECA("Restaurants and Catering"),
     ENTERTAINMENT("Entertainment");
 

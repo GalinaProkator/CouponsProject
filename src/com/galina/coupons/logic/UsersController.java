@@ -11,37 +11,29 @@ public class UsersController {
         this.usersDao = new UsersDao();
     }
 
-    public void addUser (User user){
+    public void addUser (User user) throws Exception{
 //        Validations
         if(user == null){
-
-            System.out.println("There is no user to add");
-            return;
+            throw new Exception("There is no user to add");
         }
         if(user.getPassword().equals("")){
-            System.out.println("An empty password");
-            return;
+            throw new Exception("An empty password");
         }
         if(user.getPassword().length() < 6){
-            System.out.println("The password is too short");
-            return;
+            throw new Exception("The password is too short");
         }
         if(user.getPassword().length() > 100){
-            System.out.println("The password is too long");
-            return;
+            throw new Exception("The password is too long");
         }
         if(user.getUserName().length() < 6){
-            System.out.println("The name is too short");
-            return;
+            throw new Exception("The name is too short");
         }
         if(user.getUserName().length() > 15){
-            System.out.println("The name is too long");
-            return;
+            throw new Exception("The name is too long");
         }
 
         if (this.usersDao.isUserNameExists(user.getUserName())){
-            System.out.println("Can't create user, the username already exists");
-            return;
+            throw new Exception("Can't create user, the username already exists");
         }
         this.usersDao.addUser(user);
     }

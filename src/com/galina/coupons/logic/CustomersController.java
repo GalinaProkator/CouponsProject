@@ -4,8 +4,6 @@ import com.galina.coupons.beans.Customer;
 import com.galina.coupons.dao.CustomersDao;
 import com.galina.coupons.myutils.MyUtils;
 
-import java.util.regex.Pattern;
-
 public class CustomersController {
     private CustomersDao customersDao;
 
@@ -13,41 +11,35 @@ public class CustomersController {
         this.customersDao = new CustomersDao();
     }
 
-    public void addCustomer (Customer customer){
-        //        Validations
-        if(customer == null){
+    public void addCustomer (Customer customer) throws Exception {
+        customerValidations (customer);
+        this.customersDao.addCustomer(customer);
 
-            System.out.println("A null customer");
-            return;
+    }
+
+    private void customerValidations(Customer customer) throws Exception {
+        if(customer == null){
+            throw new Exception("A null customer");
         }
         if(customer.getCustomerName().length() < 2){
-            System.out.println("The customer name is too short");
-            return;
+            throw new Exception("The customer name is too short");
         }
         if(customer.getCustomerName().length() > 100){
-            System.out.println("The customer name is too long");
-            return;
+            throw new Exception("The customer name is too long");
         }
         if (this.customersDao.isCustomerEmailExists(customer.getCustomerEmail())){
-            System.out.println("Can't create customer, the email already exists");
-            return;
+            throw new Exception("Can't create customer, the email already exists");
         }
         MyUtils myUtils = new MyUtils();
         if (!myUtils.isEmailValid(customer.getCustomerEmail())){
-            System.out.println("The e-mail is not valid");
-            return;
+            throw new Exception("The e-mail is not valid");
         }
         if(customer.getCustomerPhone().length() < 7){
-            System.out.println("The customer phone is too short");
-            return;
+            throw new Exception("The customer phone is too short");
         }
         if(customer.getCustomerPhone().length() > 15){
-            System.out.println("The customer phone is too long");
-            return;
+            throw new Exception("The customer phone is too long");
         }
-
-        this.customersDao.addCustomer(customer);
-
     }
 
 

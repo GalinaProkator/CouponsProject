@@ -10,36 +10,31 @@ public class CouponsController {
         this.couponsDao = new CouponsDao();
     }
 
-    public void addCoupon (Coupon coupon){
-        //        Validations
-        if(coupon == null){
-
-            System.out.println("A null coupon");
-            return;
-        }
-        if (this.couponsDao.isCouponExists(coupon.getCouponTitle())){
-            System.out.println("Can't create coupon, the coupon name already exists");
-            return;
-        }
-        if(coupon.getCouponTitle().length() < 2){
-            System.out.println("The coupon name is too short");
-            return;
-        }
-        if(coupon.getCouponTitle().length() > 100){
-            System.out.println("The coupon name is too long");
-            return;
-        }
-        if(coupon.getDescription().length() < 10){
-            System.out.println("The coupon name is too short");
-            return;
-        }
-        if(coupon.getDescription().length() > 500){
-            System.out.println("The coupon name is too long");
-            return;
-        }
-
+    public void addCoupon (Coupon coupon) throws Exception {
+        couponValidations (coupon);
         this.couponsDao.addCoupon(coupon);
 
+    }
+
+    private void couponValidations(Coupon coupon) throws Exception {
+        if(coupon == null){
+            throw new Exception("A null coupon");
+        }
+        if (this.couponsDao.isCouponExists(coupon.getCouponTitle())){
+            throw new Exception("Can't create coupon, the coupon name already exists");
+        }
+        if(coupon.getCouponTitle().length() < 2){
+            throw new Exception("The coupon name is too short");
+        }
+        if(coupon.getCouponTitle().length() > 100){
+            throw new Exception("The coupon name is too long");
+        }
+        if(coupon.getDescription().length() < 10){
+            throw new Exception("The coupon name is too short");
+        }
+        if(coupon.getDescription().length() > 500){
+            throw new Exception("The coupon name is too long");
+        }
     }
 
 }
