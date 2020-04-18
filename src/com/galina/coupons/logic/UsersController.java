@@ -12,7 +12,11 @@ public class UsersController {
     }
 
     public void addUser (User user) throws Exception{
-//        Validations
+        userValidations(user);
+        this.usersDao.addUser(user);
+    }
+
+    private void userValidations(User user) throws Exception {
         if(user == null){
             throw new Exception("There is no user to add");
         }
@@ -31,10 +35,8 @@ public class UsersController {
         if(user.getUserName().length() > 15){
             throw new Exception("The name is too long");
         }
-
         if (this.usersDao.isUserNameExists(user.getUserName())){
             throw new Exception("Can't create user, the username already exists");
         }
-        this.usersDao.addUser(user);
     }
 }

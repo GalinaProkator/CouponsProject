@@ -14,7 +14,6 @@ public class CompaniesController {
     public void addCompany (Company company) throws Exception {
         companyValidations (company);
         this.companiesDao.addCompany(company);
-
     }
 
     private void companyValidations(Company company) throws Exception {
