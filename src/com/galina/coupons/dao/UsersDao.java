@@ -1,7 +1,7 @@
 package com.galina.coupons.dao;
 
-import com.galina.coupons.enums.UserType;
 import com.galina.coupons.beans.User;
+import com.galina.coupons.enums.UserType;
 
 public class UsersDao {
     public void addUser (User user){
@@ -23,5 +23,9 @@ public class UsersDao {
 
     public boolean isUserNameExists (String userName){
         return false;
+    }
+
+    public void deleteUsersByCompany(Long companyId) {
+        System.out.println("Users have been successfully deleted from DB");
     }
 }

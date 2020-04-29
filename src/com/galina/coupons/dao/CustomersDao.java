@@ -25,4 +25,11 @@ public class CustomersDao {
         return false;
     }
 
+    public void updateCustomer(Customer customer) {
+        System.out.println("Customer has been successfully updated");
+    }
+
+    public void deleteCustomer(Long customerId) {
+        System.out.println("Customer has been successfully deleted from th DB");
+    }
 }

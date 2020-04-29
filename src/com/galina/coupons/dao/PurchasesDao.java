@@ -30,4 +30,20 @@ public class PurchasesDao {
         return false;
     }
 
+    public void deletePurchasesByCompany(Long companyId) {
+        System.out.println("Purchases have been successfully deleted from DB");
+    }
+
+    public void deletePurchasesByCoupon(Long couponId) {
+        System.out.println("Purchases have been successfully deleted from DB");
+    }
+
+    public void deletePurchasesByUser(Long userId) {
+        System.out.println("Purchases have been successfully deleted from DB");
+    }
+
+    public void deletePurchase(Long customerId, Long companyId) {
+        System.out.println("Purchase has been successfully deleted from DB");
+    }
+
 }

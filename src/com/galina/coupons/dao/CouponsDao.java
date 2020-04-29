@@ -6,17 +6,17 @@ import com.galina.coupons.enums.CouponCategory;
 import java.time.LocalDate;
 
 public class CouponsDao {
-    public void addCoupon (Coupon coupon){
+    public void addCoupon(Coupon coupon) {
         System.out.println("Coupon has been successfully added to DB");
     }
 
-    public Coupon[] getAllCoupons(){
-        LocalDate startDate1 = LocalDate.of(2020,1,1);
-        LocalDate endDate1 = LocalDate.of(2020,3,23);
-        LocalDate startDate2 = LocalDate.of(2020,1,1);
-        LocalDate endDate2 = LocalDate.of(2020,23,12);
-        LocalDate startDate3 = LocalDate.of(2020,1,1);
-        LocalDate endDate3 = LocalDate.of(2020,31,12);
+    public Coupon[] getAllCoupons() {
+        LocalDate startDate1 = LocalDate.of(2020, 1, 1);
+        LocalDate endDate1 = LocalDate.of(2020, 3, 23);
+        LocalDate startDate2 = LocalDate.of(2020, 1, 1);
+        LocalDate endDate2 = LocalDate.of(2020, 23, 12);
+        LocalDate startDate3 = LocalDate.of(2020, 1, 1);
+        LocalDate endDate3 = LocalDate.of(2020, 31, 12);
 
         Coupon coupon1 = new Coupon(1l,
                 "Breakfast for two",
@@ -32,7 +32,7 @@ public class CouponsDao {
         Coupon coupon3 = new Coupon(1l, "Buy a friend", CouponCategory.GOODS,
                 "robots are the future", startDate3, endDate3, 99999999959l, 888, "1234567fdg89");
 
-        Coupon[] coupons = new Coupon[3] ;
+        Coupon[] coupons = new Coupon[3];
         coupons[0] = coupon1;
         coupons[1] = coupon2;
         coupons[2] = coupon3;
@@ -40,9 +40,20 @@ public class CouponsDao {
         return coupons;
     }
 
-    public boolean isCouponExists (String couponTitle){
+    public boolean isCouponExists(String couponTitle) {
         return false;
     }
 
 
+    public void deleteCouponsByCompany(Long companyId) {
+        System.out.println("Coupons have been successfully deleted from DB");
+    }
+
+    public void deleteCoupon(Long couponId) {
+        System.out.println("Coupon have been successfully deleted from DB");
+    }
+
+    public void updateCoupon(Coupon coupon) {
+        System.out.println("Coupon have been successfully updated");
+    }
 }

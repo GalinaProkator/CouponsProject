@@ -10,4 +10,20 @@ public class MyUtils {
         }
         return true;
     }
+
+    public boolean isUsernameValid(String username) {
+        boolean isUsernameValid = Pattern.matches("^[a-z0-9_-]{6,14}$", username);
+        if (!isUsernameValid) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isNameValid(String name) {
+        boolean isNameValid = Pattern.matches("^([A-Z][a-z]*(\\s))+[A-Z][a-z]*$", name);
+        if (!isNameValid) {
+            return false;
+        }
+        return true;
+    }
 }

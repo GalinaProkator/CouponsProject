@@ -2,8 +2,6 @@ package com.galina.coupons.dao;
 
 import com.galina.coupons.beans.Company;
 
-import java.util.regex.Pattern;
-
 public class CompaniesDao {
     public void addCompany (Company company){
         System.out.println("Company has been successfully added to DB");
@@ -31,4 +29,11 @@ public class CompaniesDao {
     }
 
 
+    public void updateCompany(Company company) {
+        System.out.println("Company has been successfully updated");
+    }
+
+    public void deleteCompany(Long companyId) {
+        System.out.println("Company has been successfully deleted from the DB");
+    }
 }

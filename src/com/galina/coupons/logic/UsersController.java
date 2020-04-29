@@ -2,41 +2,52 @@ package com.galina.coupons.logic;
 
 import com.galina.coupons.beans.User;
 import com.galina.coupons.dao.UsersDao;
+import com.galina.coupons.enums.ErrorType;
+import com.galina.coupons.myutils.ApplicationException;
+import com.galina.coupons.myutils.MyUtils;
 
 public class UsersController {
 
     private UsersDao usersDao;
 
-    public UsersController(){
+    public UsersController() {
         this.usersDao = new UsersDao();
     }
 
-    public void addUser (User user) throws Exception{
+    public void addUser(User user) throws ApplicationException {
         userValidations(user);
         this.usersDao.addUser(user);
     }
 
-    private void userValidations(User user) throws Exception {
-        if(user == null){
-            throw new Exception("There is no user to add");
+    private void userValidations(User user) throws ApplicationException {
+        if (user == null) {
+            throw new ApplicationException(ErrorType.NULL, "There is no user to add");
         }
-        if(user.getPassword().equals("")){
-            throw new Exception("An empty password");
+        MyUtils myUtils = new MyUtils();
+        if (!myUtils.isUsernameValid(user.getUserName())) {
+            throw new ApplicationException(ErrorType.INVALID_EMAIL, "The e-mail is not valid");
         }
-        if(user.getPassword().length() < 6){
-            throw new Exception("The password is too short");
+        if (user.getPassword().equals("")) {
+            throw new ApplicationException(ErrorType.NULL, "An empty password");
         }
-        if(user.getPassword().length() > 100){
-            throw new Exception("The password is too long");
+        if (user.getPassword().length() < 8) {
+            throw new ApplicationException(ErrorType.INVALID_PASSWORD, "The password is too short, password must be between 8-20 characters and contain a number");
         }
-        if(user.getUserName().length() < 6){
-            throw new Exception("The name is too short");
+        if (user.getPassword().length() > 20) {
+            throw new ApplicationException(ErrorType.INVALID_PASSWORD, "The password is too long, password must be between 8-20 characters and contain a number");
         }
-        if(user.getUserName().length() > 15){
-            throw new Exception("The name is too long");
+        if (user.getUserName().length() < 2) {
+            throw new ApplicationException(ErrorType.INVALID_USERNAME, "The username is too short");
         }
-        if (this.usersDao.isUserNameExists(user.getUserName())){
-            throw new Exception("Can't create user, the username already exists");
+        if (user.getUserName().length() > 20) {
+            throw new ApplicationException(ErrorType.INVALID_USERNAME, "The username is too long");
         }
+        if (this.usersDao.isUserNameExists(user.getUserName())) {
+            throw new ApplicationException(ErrorType.USERNAME_EXISTS, "Can't create user, the username already exists");
+        }
+    }
+
+    public void deleteUsersByCompany(Long companyId) {
+        this.usersDao.deleteUsersByCompany(companyId);
     }
 }
