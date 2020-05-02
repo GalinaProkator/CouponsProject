@@ -11,8 +11,11 @@ public class Tester {
 //        usersController.addUser(user);
 //
         CompaniesController companiesController = new CompaniesController();
-        Company company = new Company ("Husky", "husky@husky.com", "5566778", null);
+        Company company = new Company ("BearBear", "bear@bear.com", "456462829", null);
         companiesController.addCompany(company);
+
+        Company company1 = new Company (1l, "Bear Company", "bear@bearcompany.com", "459862829", null);
+        companiesController.updateCompany(company1);
 //
 //        CustomersController customersController = new CustomersController();
 //        Customer customer = new Customer ("Love", "love@love.com", "823456789");
