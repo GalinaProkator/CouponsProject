@@ -17,6 +17,28 @@ public class PurchasesController {
         this.purchasesDao.addPurchase(purchase);
     }
 
+    public void updatePurchase (Purchase purchase) throws ApplicationException {
+        purchaseValidations (purchase);
+        this.purchasesDao.updatePurchase(purchase);
+    }
+
+    public void deletePurchasesByCompany(Long companyId) {
+        this.purchasesDao.deletePurchasesByCompany(companyId);
+    }
+
+    public void deletePurchasesByCoupon(Long couponId) {
+        this.purchasesDao.deletePurchasesByCoupon(couponId);
+    }
+
+    public void deletePurchasesByCustomer(Long customerId) {
+        this.purchasesDao.deletePurchasesByUser(customerId);
+    }
+
+    public void deletePurchase(Long customerId, Long companyId) {
+        this.purchasesDao.deletePurchase(customerId, companyId);
+    }
+
+
     private void purchaseValidations(Purchase purchase) throws ApplicationException {
         if(purchase == null){
             throw new ApplicationException(ErrorType.NULL, "A null purchase");
@@ -38,21 +60,6 @@ public class PurchasesController {
         }
     }
 
-    public void deletePurchasesByCompany(Long companyId) {
-        this.purchasesDao.deletePurchasesByCompany(companyId);
-    }
-
-    public void deletePurchasesByCoupon(Long couponId) {
-        this.purchasesDao.deletePurchasesByCoupon(couponId);
-    }
-
-    public void deletePurchasesByCustomer(Long customerId) {
-        this.purchasesDao.deletePurchasesByUser(customerId);
-    }
-
-    public void deletePurchase(Long customerId, Long companyId) {
-        this.purchasesDao.deletePurchase(customerId, companyId);
-    }
 
 
 }

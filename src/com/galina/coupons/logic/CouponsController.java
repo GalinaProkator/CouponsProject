@@ -24,6 +24,15 @@ public class CouponsController {
         this.couponsDao.updateCoupon(coupon);
     }
 
+    public void deleteCoupon(Long couponId) {
+        this.purchasesController.deletePurchasesByCoupon(couponId);
+        this.couponsDao.deleteCoupon(couponId);
+    }
+
+    public void deleteCouponsByCompany(Long companyId) {
+        this.couponsDao.deleteCouponsByCompany(companyId);
+    }
+
     private void couponValidations(Coupon coupon) throws ApplicationException {
         if(coupon == null){
             throw new ApplicationException(ErrorType.NULL, "A null coupon");
@@ -46,14 +55,5 @@ public class CouponsController {
         if(coupon.getPrice() < 0){
             throw new ApplicationException(ErrorType.INVALID_PRICE, "The coupon price must be 0 or more");
         }
-    }
-
-    public void deleteCoupon(Long couponId) {
-        this.purchasesController.deletePurchasesByCoupon(couponId);
-        this.couponsDao.deleteCoupon(couponId);
-    }
-
-    public void deleteCouponsByCompany(Long companyId) {
-        this.couponsDao.deleteCouponsByCompany(companyId);
     }
 }

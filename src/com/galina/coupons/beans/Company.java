@@ -4,7 +4,7 @@ package com.galina.coupons.beans;
  * Added comment1
  */
 public class Company {
-    private Long id;
+    private Long companyId;
     private String companyName;
     private String companyEmail;
     private String companyPhone;
@@ -17,20 +17,20 @@ public class Company {
         this.companyAddress = companyAddress;
     }
 
-    public Company(Long id, String companyName, String companyEmail, String companyPhone, String companyAddress) {
+    public Company(Long companyId, String companyName, String companyEmail, String companyPhone, String companyAddress) {
         this(companyName, companyEmail, companyPhone, companyAddress);
-        this.id = id;
+        this.companyId = companyId;
     }
 
     public Company() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public String getCompanyName() {
@@ -63,5 +63,16 @@ public class Company {
 
     public void setCompanyAddress(String companyAddress) {
         this.companyAddress = companyAddress;
+    }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "comanyId=" + companyId +
+                ", companyName='" + companyName + '\'' +
+                ", companyEmail='" + companyEmail + '\'' +
+                ", companyPhone='" + companyPhone + '\'' +
+                ", companyAddress='" + companyAddress + '\'' +
+                '}';
     }
 }

@@ -56,20 +56,20 @@ public enum ErrorType {
     FAILED_DELETE_COUPON(673, "FAILED_DELETE_COUPON", "Failed to delete coupon(s)", true),
     FAILED_DELETE_PURCHASE(674, "FAILED_DELETE_PURCHASE", "Failed to delete purchase(s)", true);
 
-    private int errorNumber;
+    private int errorCode;
     private String errorName;
     private String errorMessage;
     private boolean isShowStackTrace;
 
-    ErrorType(int errorNumber, String errorName, String errorMessage, boolean isShowStackTrace) {
-        this.errorNumber = errorNumber;
+    private ErrorType(int errorCode, String errorName, String errorMessage, boolean isShowStackTrace) {
+        this.errorCode = errorCode;
         this.errorName = errorName;
         this.errorMessage = errorMessage;
         this.isShowStackTrace = isShowStackTrace;
     }
 
-    public int getErrorNumber() {
-        return errorNumber;
+    public int getErrorCode() {
+        return errorCode;
     }
 
     public String getErrorName() {

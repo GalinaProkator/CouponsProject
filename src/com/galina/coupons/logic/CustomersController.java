@@ -9,10 +9,12 @@ import com.galina.coupons.myutils.MyUtils;
 public class CustomersController {
     private CustomersDao customersDao;
     private PurchasesController purchasesController;
+    private UsersController usersController;
 
     public CustomersController(){
         this.customersDao = new CustomersDao();
         this.purchasesController = new PurchasesController();
+        this.usersController = new UsersController();
     }
 
     public void addCustomer (Customer customer) throws ApplicationException {
@@ -23,6 +25,12 @@ public class CustomersController {
     public void updateCustomer (Customer customer) throws ApplicationException {
         customerValidations (customer);
         this.customersDao.updateCustomer(customer);
+    }
+
+    public void deleteCustomer(Long customerId) throws ApplicationException {
+        this.purchasesController.deletePurchasesByCustomer(customerId);
+        this.usersController.deleteUserByCustomer(customerId);
+        this.customersDao.deleteCustomer(customerId);
     }
 
     private void customerValidations(Customer customer) throws ApplicationException {
@@ -52,12 +60,4 @@ public class CustomersController {
             throw new ApplicationException(ErrorType.INVALID_PHONE_NUMBER,"The customer phone is too long");
         }
     }
-
-    public void deleteCustomer(Customer customer) throws ApplicationException {
-        customerValidations(customer);
-        this.purchasesController.deletePurchasesByCustomer(customer.getId());
-        this.customersDao.deleteCustomer(customer.getId());
-    }
-
-
 }

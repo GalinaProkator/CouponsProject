@@ -10,7 +10,7 @@ public class ApplicationException extends Exception {
         this.errorType = errorType;
     }
 
-    public ApplicationException(ApplicationException e, ErrorType errorType, String message) {
+    public ApplicationException(ErrorType errorType, String message, ApplicationException e) {
         super(message, e);
         this.errorType = errorType;
     }

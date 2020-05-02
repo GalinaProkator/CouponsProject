@@ -19,6 +19,19 @@ public class UsersController {
         this.usersDao.addUser(user);
     }
 
+    public void updateUser(User user) throws ApplicationException {
+        userValidations(user);
+        this.usersDao.updateUser(user);
+    }
+
+    public void deleteUsersByCompany(Long companyId) {
+        this.usersDao.deleteUsersByCompany(companyId);
+    }
+
+    public void deleteUserByCustomer(Long customerId) {
+        this.usersDao.deleteUserByCustomer (customerId);
+    }
+
     private void userValidations(User user) throws ApplicationException {
         if (user == null) {
             throw new ApplicationException(ErrorType.NULL, "There is no user to add");
@@ -47,7 +60,4 @@ public class UsersController {
         }
     }
 
-    public void deleteUsersByCompany(Long companyId) {
-        this.usersDao.deleteUsersByCompany(companyId);
-    }
 }

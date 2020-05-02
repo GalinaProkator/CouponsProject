@@ -13,14 +13,14 @@ public class CompaniesController {
     private UsersController usersController;
 
     public CompaniesController() {
-        this.companiesDao = companiesDao;
-        this.purchasesController = purchasesController;
-        this.couponsController = couponsController;
-        this.usersController = usersController;
+        this.companiesDao = new CompaniesDao();
+        this.purchasesController = new PurchasesController();
+        this.couponsController = new CouponsController();
+        this.usersController = new UsersController();
     }
 
 
-    public void addCompany (Company company) throws ApplicationException {
+    public void addCompany (Company company) throws Exception {
         companyValidations (company);
         this.companiesDao.addCompany(company);
     }
@@ -30,13 +30,13 @@ public class CompaniesController {
         this.companiesDao.updateCompany(company);
     }
 
-    public void deleteCompany (Company company) throws ApplicationException {
-        companyValidations(company);
-        this.purchasesController.deletePurchasesByCompany(company.getId());
-        this.couponsController.deleteCouponsByCompany(company.getId());
-        this.usersController.deleteUsersByCompany(company.getId());
-        this.companiesDao.deleteCompany(company.getId());
-    }
+//    public void deleteCompany (Company company) throws ApplicationException {
+//        companyValidations(company);
+//        this.purchasesController.deletePurchasesByCompany(company.getId());
+//        this.couponsController.deleteCouponsByCompany(company.getId());
+//        this.usersController.deleteUsersByCompany(company.getId());
+//        this.companiesDao.deleteCompany(company.getId());
+//    }
 
     private void companyValidations(Company company) throws ApplicationException {
         if(company == null){
@@ -49,9 +49,9 @@ public class CompaniesController {
             throw new ApplicationException(ErrorType.COMPANY_EXISTS, "Company with such name or e-mail already exists");
         }
         MyUtils myUtils = new MyUtils();
-        if (!myUtils.isNameValid(company.getCompanyName())) {
-            throw new ApplicationException(ErrorType.INVALID_EMAIL, "The e-mail is not valid");
-        }
+//        if (!myUtils.isNameValid(company.getCompanyName())) {
+//            throw new ApplicationException(ErrorType.INVALID_EMAIL, "The name is not valid");
+//        }
         if(company.getCompanyName().length() < 2){
             throw new ApplicationException(ErrorType.INVALID_COMPANY_NAME, "The company name is too short, company name must be between 2-100 characters and contain letters only");
         }

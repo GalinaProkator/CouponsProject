@@ -46,4 +46,7 @@ public class PurchasesDao {
         System.out.println("Purchase has been successfully deleted from DB");
     }
 
+    public void updatePurchase(Purchase purchase) {
+        System.out.println("Purchase has been successfully updated");
+    }
 }
