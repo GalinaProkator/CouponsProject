@@ -36,7 +36,7 @@ public class CompaniesDao {
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (!resultSet.next()) {
-                throw new ApplicationException(ErrorType.GENERAL_ERROR, "Invalid company key during creation");
+                throw new ApplicationException(ErrorType.FAILED_CREATE_COMPANY, "Invalid company key during creation");
             }
             System.out.println("Company has been successfully added to DB");
             return resultSet.getLong(1);
@@ -252,7 +252,7 @@ public class CompaniesDao {
             int result = preparedStatement.executeUpdate();
 
             if (result == 0) {
-                throw new ApplicationException(ErrorType.GENERAL_ERROR, "Failed to delete company");
+                throw new ApplicationException(ErrorType.FAILED_DELETE_COMPANY, "Failed to delete company");
             }
             System.out.println(result + " Company has been successfully deleted from DB");
 

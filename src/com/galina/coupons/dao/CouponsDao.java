@@ -71,29 +71,134 @@ public class CouponsDao {
             connection = JdbcUtils.getConnection();
 
             //Creating the SQL query
-            String sqlStatement = "UPDATE companies SET company_name = ?, company_email = ?, company_phone = ?, company_address = ?  WHERE id = ?";
+            String sqlStatement = "UPDATE coupons SET coupon_title = ?, category = ?, description = ?, " +
+                    "start_date = ?, end_date = ?, amount = ?, price = ?, image = ?  WHERE id = ?";
 
             //Combining between the syntax and our connection
             preparedStatement = connection.prepareStatement(sqlStatement);
 
             //Replacing the question marks in the statement above with the relevant data
-            preparedStatement.setString(1, company.getCompanyName());
-            preparedStatement.setString(2, company.getCompanyEmail());
-            preparedStatement.setString(3, company.getCompanyPhone());
-            preparedStatement.setString(4, company.getCompanyAddress());
-            preparedStatement.setLong(5, company.getCompanyId());
+            preparedStatement.setString(1, coupon.getCouponTitle());
+            preparedStatement.setString(2, coupon.getCategory().getName());
+            preparedStatement.setString(3, coupon.getDescription());
+            preparedStatement.setDate(4, (Date) coupon.getStartDate());
+            preparedStatement.setDate(5, (Date) coupon.getEndDate());
+            preparedStatement.setLong(6, coupon.getAmount());
+            preparedStatement.setInt(7, coupon.getPrice());
+            preparedStatement.setString(8, coupon.getImage());
 
             //Executing the update
             int result = preparedStatement.executeUpdate();
 
             if (result != 1) {
-                throw new ApplicationException(ErrorType.GENERAL_ERROR, "Failed to update the company");
+                throw new ApplicationException(ErrorType.FAILED_CREATE_COUPON, "Failed to update the coupon");
             }
-            System.out.println("Company has been successfully updated");
+            System.out.println("Coupon has been successfully updated");
 
         } catch (Exception e) {
             //			e.printStackTrace();
-            throw new Exception("Failed to update company " + company.toString(), e);
+            throw new Exception("Failed to update coupon " + coupon.toString(), e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
+    public boolean isCouponExists(String couponTitle) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "SELECT coupon_title FROM coupons WHERE coupon_title = ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setString(1, couponTitle);
+
+            //Executing the update
+            ResultSet result = preparedStatement.executeQuery();
+
+            if (result == null) {
+                return false;
+            } else return true;
+
+        } catch (Exception e) {
+            throw new Exception("Query failed", e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
+    public void deleteCouponsByCompany(Long companyId) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "DELETE FROM coupons WHERE company_id = ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, companyId);
+
+            //Executing the update
+            int result = preparedStatement.executeUpdate();
+
+            if (result == 0) {
+                throw new ApplicationException(ErrorType.FAILED_DELETE_COUPON, "Failed to delete coupons");
+            }
+            System.out.println(result + " Coupons have been successfully deleted from DB");
+
+        } catch (Exception e) {
+            throw new Exception("Failed to delete coupons of the company " + companyId, e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
+    public void deleteCoupon(Long couponId) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "DELETE FROM coupons WHERE id = ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, couponId);
+
+            //Executing the update
+            int result = preparedStatement.executeUpdate();
+
+            if (result == 0) {
+                throw new ApplicationException(ErrorType.FAILED_DELETE_COUPON, "Failed to delete coupon");
+            }
+            System.out.println(result + " Coupon has been successfully deleted from DB");
+
+        } catch (Exception e) {
+            throw new Exception("Failed to delete coupon " + couponId, e);
         } finally {
             //Closing the resources
             JdbcUtils.closeResources(connection, preparedStatement);
@@ -101,9 +206,7 @@ public class CouponsDao {
     }
 
 
-
 }
-//
 //    public Coupon[] getAllCoupons() {
 //        LocalDate startDate1 = LocalDate.of(2020, 1, 1);
 //        LocalDate endDate1 = LocalDate.of(2020, 3, 23);
@@ -134,20 +237,4 @@ public class CouponsDao {
 //        return coupons;
 //    }
 //
-//    public boolean isCouponExists(String couponTitle) {
-//        return false;
-//    }
 //
-//
-//    public void deleteCouponsByCompany(Long companyId) {
-//        System.out.println("Coupons have been successfully deleted from DB");
-//    }
-//
-//    public void deleteCoupon(Long couponId) {
-//        System.out.println("Coupon have been successfully deleted from DB");
-//    }
-//
-//    public void updateCoupon(Coupon coupon) {
-//        System.out.println("Coupon have been successfully updated");
-//    }
-//}

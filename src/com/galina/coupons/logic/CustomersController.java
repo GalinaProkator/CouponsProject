@@ -3,6 +3,7 @@ package com.galina.coupons.logic;
 import com.galina.coupons.beans.Customer;
 import com.galina.coupons.dao.CustomersDao;
 import com.galina.coupons.enums.ErrorType;
+import com.galina.coupons.enums.UserType;
 import com.galina.coupons.myutils.ApplicationException;
 import com.galina.coupons.myutils.MyUtils;
 
@@ -19,8 +20,14 @@ public class CustomersController {
 
     public void addCustomer (Customer customer) throws ApplicationException {
         customerValidations (customer);
+        customer.getUser().setType(UserType.CUSTOMER);
+        this.usersController.addUser(customer.getUser());
+        long userId = customer.getUser().getId();
+        customer.setId(userId);
+
         this.customersDao.addCustomer(customer);
     }
+
 
     public void updateCustomer (Customer customer) throws ApplicationException {
         customerValidations (customer);

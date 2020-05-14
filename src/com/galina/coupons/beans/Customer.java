@@ -2,6 +2,11 @@ package com.galina.coupons.beans;
 
 public class Customer {
     private Long id;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     private User user;
     private String customerName;
     private String customerEmail;
@@ -16,6 +21,10 @@ public class Customer {
     public Customer(Long id, String customerName, String customerEmail, String customerPhone) {
         this(customerName, customerEmail, customerPhone);
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public Customer() {

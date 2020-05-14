@@ -42,7 +42,6 @@ public enum ErrorType {
     INVALID_COMPANY_ID(652, "INVALID_COMPANY_ID", "Invalid company ID", false),
 
     //    Create errors
-    FAILED_TO_GENERATE_ID(660, "FAILED_TO_GENERATE_ID", "Failed to generate ID", true),
     FAILED_CREATE_USER(661, "FAILED_GENERATE_USER", "Failed to create user", true),
     FAILED_CREATE_CUSTOMER(662, "FAILED_CREATE_CUSTOMER", "Failed to create customer", true),
     FAILED_CREATE_COMPANY(663, "FAILED_CREATE_COMPANY", "Failed to create company", true),
