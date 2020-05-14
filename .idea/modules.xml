@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CouponsProjectGalinaProkator.iml" filepath="$PROJECT_DIR$/CouponsProjectGalinaProkator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../TimerTaskGalina/TimerTaskGalina.iml" filepath="$PROJECT_DIR$/../TimerTaskGalina/TimerTaskGalina.iml" />
     </modules>
   </component>
 </project>

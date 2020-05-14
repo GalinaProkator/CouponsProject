@@ -56,7 +56,7 @@ public class CompaniesDao {
         }
     }
 
-    public long updateCompany(Company company) throws Exception {
+    public void updateCompany(Company company) throws Exception {
         //Turn on the connections
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -70,7 +70,7 @@ public class CompaniesDao {
             String sqlStatement = "UPDATE companies SET company_name = ?, company_email = ?, company_phone = ?, company_address = ?  WHERE id = ?";
 
             //Combining between the syntax and our connection
-            preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement = connection.prepareStatement(sqlStatement);
 
             //Replacing the question marks in the statement above with the relevant data
             preparedStatement.setString(1, company.getCompanyName());
@@ -86,7 +86,6 @@ public class CompaniesDao {
                 throw new ApplicationException(ErrorType.GENERAL_ERROR, "Failed to update the company");
             }
             System.out.println("Company has been successfully updated");
-            return result;
 
         } catch (Exception e) {
             //			e.printStackTrace();
@@ -128,10 +127,6 @@ public class CompaniesDao {
             else return true;
 
         } catch (Exception e) {
-            //			e.printStackTrace();
-            //If there was an exception in the "try" block above, it is caught here and notifies a level above.
-            //			throw new ApplicationException(e, ErrorType.GENERAL_ERROR, DateUtils.getCurrentDateAndTime()
-            //					+" Create company failed");
             throw new Exception("Query failed", e);
         } finally {
             //Closing the resources
@@ -167,10 +162,6 @@ public class CompaniesDao {
             else return true;
 
         } catch (Exception e) {
-            //			e.printStackTrace();
-            //If there was an exception in the "try" block above, it is caught here and notifies a level above.
-            //			throw new ApplicationException(e, ErrorType.GENERAL_ERROR, DateUtils.getCurrentDateAndTime()
-            //					+" Create company failed");
             throw new Exception("Query failed", e);
         } finally {
             //Closing the resources
@@ -193,8 +184,38 @@ public class CompaniesDao {
 
 
 
+    public void deleteCompany(Long companyId) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
 
-    public void deleteCompany(Long companyId) {
-        System.out.println("Company has been successfully deleted from the DB");
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            //CompanyID is defined as a primary key and auto incremented
+            String sqlStatement = "DELETE FROM companies WHERE company_id = ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, companyId);
+
+            //Executing the update
+            int result = preparedStatement.executeUpdate();
+
+            if (result ==0) {
+                throw new ApplicationException(ErrorType.GENERAL_ERROR, "Failed to delete company");
+            }
+            System.out.println(result + " Company has been successfully deleted from DB");
+
+        } catch (Exception e) {
+            throw new Exception("Failed to delete company " + companyId, e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
     }
 }

@@ -30,13 +30,13 @@ public class CompaniesController {
         this.companiesDao.updateCompany(company);
     }
 
-//    public void deleteCompany (Company company) throws ApplicationException {
-//        companyValidations(company);
-//        this.purchasesController.deletePurchasesByCompany(company.getId());
-//        this.couponsController.deleteCouponsByCompany(company.getId());
-//        this.usersController.deleteUsersByCompany(company.getId());
-//        this.companiesDao.deleteCompany(company.getId());
-//    }
+    public void deleteCompany (Company company) throws Exception {
+        companyValidations(company);
+        this.purchasesController.deletePurchasesByCompany(company.getCompanyId());
+        this.couponsController.deleteCouponsByCompany(company.getCompanyId());
+        this.usersController.deleteUsersByCompany(company.getCompanyId());
+        this.companiesDao.deleteCompany(company.getCompanyId());
+    }
 
     private void companyValidations(Company company) throws Exception {
         if(company == null){
