@@ -5,10 +5,7 @@ import com.galina.coupons.enums.ErrorType;
 import com.galina.coupons.myutils.ApplicationException;
 import com.galina.coupons.myutils.JdbcUtils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class CompaniesDao {
 
@@ -66,7 +63,6 @@ public class CompaniesDao {
             connection = JdbcUtils.getConnection();
 
             //Creating the SQL query
-            //CompanyID is defined as a primary key and auto incremented
             String sqlStatement = "UPDATE companies SET company_name = ?, company_email = ?, company_phone = ?, company_address = ?  WHERE id = ?";
 
             //Combining between the syntax and our connection
@@ -89,9 +85,6 @@ public class CompaniesDao {
 
         } catch (Exception e) {
             //			e.printStackTrace();
-            //If there was an exception in the "try" block above, it is caught here and notifies a level above.
-            //			throw new ApplicationException(e, ErrorType.GENERAL_ERROR, DateUtils.getCurrentDateAndTime()
-            //					+" Create company failed");
             throw new Exception("Failed to update company " + company.toString(), e);
         } finally {
             //Closing the resources
@@ -109,7 +102,6 @@ public class CompaniesDao {
             connection = JdbcUtils.getConnection();
 
             //Creating the SQL query
-            //CompanyID is defined as a primary key and auto incremented
             String sqlStatement = "SELECT company_name FROM companies WHERE company_name = ?";
 
             //Combining between the syntax and our connection
@@ -123,8 +115,7 @@ public class CompaniesDao {
 
             if (result == null) {
                 return false;
-            }
-            else return true;
+            } else return true;
 
         } catch (Exception e) {
             throw new Exception("Query failed", e);
@@ -144,7 +135,6 @@ public class CompaniesDao {
             connection = JdbcUtils.getConnection();
 
             //Creating the SQL query
-            //CompanyID is defined as a primary key and auto incremented
             String sqlStatement = "SELECT company_email FROM companies WHERE company_email = ?";
 
             //Combining between the syntax and our connection
@@ -158,8 +148,7 @@ public class CompaniesDao {
 
             if (result == null) {
                 return false;
-            }
-            else return true;
+            } else return true;
 
         } catch (Exception e) {
             throw new Exception("Query failed", e);
@@ -169,18 +158,75 @@ public class CompaniesDao {
         }
     }
 
-//    public Company[] getAllCompanies() {
-//        Company company1 = new Company("Coca-Cola", "cocacola@cocacola.com", "3333333", null);
-//        Company company2 = new Company("Unilever", "unilever@unilever.com", "62375276572", null);
-//        Company company3 = new Company("Nike", "nike@nike.com", "6343323", null);
-//
-//        Company[] companies = new Company[3];
-//        companies[0] = company1;
-//        companies[1] = company2;
-//        companies[2] = company3;
-//
-//        return companies;
-//    }
+    public Company[] getAllCompanies() throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "SELECT * FROM companies";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Executing the update
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                throw new ApplicationException(ErrorType.GENERAL_ERROR, "Cannot retrieve information");
+            }
+//getting the number of rows returned to create an array of companies
+            int numberOfRows = getRowCount(resultSet);
+            if (numberOfRows == 0){
+                throw new ApplicationException(ErrorType.GENERAL_ERROR, "0 companies in the table");
+            }
+//            creating an array of companies
+            Company[] companies = new Company[numberOfRows];
+            int i = 0;
+            while (resultSet.next()){
+                companies[i].setCompanyId(resultSet.getLong("id"));
+                companies[i].setCompanyName(resultSet.getString("company_name"));
+                companies[i].setCompanyEmail(resultSet.getString("company_email"));
+                companies[i].setCompanyPhone(resultSet.getString("company_phone"));
+                companies[i].setCompanyAddress(resultSet.getString("company_address"));
+                i++;
+            }
+
+            return companies;
+
+        } catch (Exception e) {
+            //			e.printStackTrace();
+            throw new Exception("Failed to retrieve data", e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
+    private int getRowCount(ResultSet resultSet) {
+        if (resultSet == null) {
+            return 0;
+        }
+
+        try {
+            resultSet.last();
+            return resultSet.getRow();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.beforeFirst();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return 0;
+    }
 
 
 
@@ -194,7 +240,6 @@ public class CompaniesDao {
             connection = JdbcUtils.getConnection();
 
             //Creating the SQL query
-            //CompanyID is defined as a primary key and auto incremented
             String sqlStatement = "DELETE FROM companies WHERE company_id = ?";
 
             //Combining between the syntax and our connection
@@ -206,7 +251,7 @@ public class CompaniesDao {
             //Executing the update
             int result = preparedStatement.executeUpdate();
 
-            if (result ==0) {
+            if (result == 0) {
                 throw new ApplicationException(ErrorType.GENERAL_ERROR, "Failed to delete company");
             }
             System.out.println(result + " Company has been successfully deleted from DB");

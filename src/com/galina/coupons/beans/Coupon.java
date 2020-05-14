@@ -2,21 +2,19 @@ package com.galina.coupons.beans;
 
 import com.galina.coupons.enums.CouponCategory;
 
-import java.time.LocalDate;
-
 public class Coupon {
     private Long id;
     private Long companyId;
     private String couponTitle;
     private CouponCategory category;
     private String description;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private java.util.Date startDate;
+    private java.util.Date endDate;
     private Long amount;
     private int price;
     private String image;
 
-    public Coupon(Long companyId, String couponTitle, CouponCategory category, String description, LocalDate startDate, LocalDate endDate, Long amount, int price, String image) {
+    public Coupon(Long companyId, String couponTitle, CouponCategory category, String description, java.util.Date startDate, java.util.Date endDate, Long amount, int price, String image) {
         this.companyId = companyId;
         this.couponTitle = couponTitle;
         this.category = category;
@@ -28,7 +26,7 @@ public class Coupon {
         this.image = image;
     }
 
-    public Coupon(Long id, Long companyId, String couponTitle, CouponCategory category, String description, LocalDate startDate, LocalDate endDate, Long amount, int price, String image) {
+    public Coupon(Long id, Long companyId, String couponTitle, CouponCategory category, String description, java.util.Date startDate, java.util.Date endDate, Long amount, int price, String image) {
         this(companyId, couponTitle, category, description, startDate, endDate, amount, price, image);
         this.id = id;
     }
@@ -76,19 +74,19 @@ public class Coupon {
         this.description = description;
     }
 
-    public LocalDate getStartDate() {
+    public java.util.Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(java.util.Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public java.util.Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(java.util.Date endDate) {
         this.endDate = endDate;
     }
 
