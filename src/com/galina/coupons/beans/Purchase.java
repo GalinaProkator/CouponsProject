@@ -7,10 +7,14 @@ public class Purchase {
     private Long amount;
     private java.util.Date timestamp;
 
-    public Purchase(Long customerId, Long couponId, Long amount, java.util.Date timestamp) {
+    public Purchase(Long customerId, Long couponId, Long amount) {
         this.customerId = customerId;
         this.couponId = couponId;
         this.amount = amount;
+    }
+
+    public Purchase(Long customerId, Long couponId, Long amount, java.util.Date timestamp) {
+        this(customerId, couponId, amount);
         this.timestamp = timestamp;
     }
 

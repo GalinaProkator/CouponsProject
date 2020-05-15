@@ -104,7 +104,7 @@ public class PurchasesDao {
         }
     }
 
-    public Purchase getPurchase(long customerId, long couponId, java.util.Date timestamp) throws Exception {
+    public Purchase getPurchase(long purchaseId) throws Exception {
         //Turn on the connections
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -114,10 +114,13 @@ public class PurchasesDao {
             connection = JdbcUtils.getConnection();
 
             //Creating the SQL query
-            String sqlStatement = "SELECT * FROM purchases";
+            String sqlStatement = "SELECT * FROM purchases WHERE id = ?";
 
             //Combining between the syntax and our connection
             preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, purchaseId);
 
             //Executing the update
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -125,24 +128,15 @@ public class PurchasesDao {
             if (!resultSet.next()) {
                 throw new ApplicationException(ErrorType.GENERAL_ERROR, "Cannot retrieve information");
             }
-//getting the number of rows returned to create an array of purchases
-            int numberOfRows = MyUtils.getRowCount(resultSet);
-            if (numberOfRows == 0) {
-                throw new ApplicationException(ErrorType.GENERAL_ERROR, "0 purchases in the table");
-            }
-//            creating an array of purchases
-            Purchase[] purchases = new Purchase[numberOfRows];
-            int i = 0;
-            while (resultSet.next()) {
-                purchases[i].setId(resultSet.getLong("id"));
-                purchases[i].setCustomerId(resultSet.getLong("customer_id"));
-                purchases[i].setCouponId(resultSet.getLong("coupon_id"));
-                purchases[i].setAmount(resultSet.getLong("amount"));
-                purchases[i].setTimestamp(resultSet.getDate("timestamp"));
-                i++;
-            }
 
-            return purchases;
+            Purchase purchase = new Purchase();
+                purchase.setId(resultSet.getLong("id"));
+                purchase.setCustomerId(resultSet.getLong("customer_id"));
+                purchase.setCouponId(resultSet.getLong("coupon_id"));
+                purchase.setAmount(resultSet.getLong("amount"));
+                purchase.setTimestamp(resultSet.getTimestamp("timestamp"));
+
+            return purchase;
 
         } catch (Exception e) {
             //			e.printStackTrace();
@@ -153,21 +147,140 @@ public class PurchasesDao {
         }
     }
 
-//    public void deletePurchasesByCompany(Long companyId) {
-//        System.out.println("Purchases have been successfully deleted from DB");
-//    }
-//
-//    public void deletePurchasesByCoupon(Long couponId) {
-//        System.out.println("Purchases have been successfully deleted from DB");
-//    }
-//
-//    public void deletePurchasesByUser(Long userId) {
-//        System.out.println("Purchases have been successfully deleted from DB");
-//    }
-//
-//    public void deletePurchase(Long customerId, Long companyId) {
-//        System.out.println("Purchase has been successfully deleted from DB");
-//    }
-//
+    public void deletePurchasesByCompany(Long companyId) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "DELETE FROM purchases WHERE company_id = ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, companyId);
+
+            //Executing the update
+            int result = preparedStatement.executeUpdate();
+
+            if (result == 0) {
+                throw new ApplicationException(ErrorType.FAILED_DELETE_PURCHASE, "Failed to delete purchases");
+            }
+            System.out.println(result + " Purchases has been successfully deleted from DB");
+
+        } catch (Exception e) {
+            throw new Exception("Failed to delete coupon purchases of the company " + companyId, e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
+    public void deletePurchasesByCoupon(Long couponId) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "DELETE FROM purchases WHERE coupon_id = ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, couponId);
+
+            //Executing the update
+            int result = preparedStatement.executeUpdate();
+
+            if (result == 0) {
+                throw new ApplicationException(ErrorType.FAILED_DELETE_PURCHASE, "Failed to delete purchases");
+            }
+            System.out.println(result + " Purchases has been successfully deleted from DB");
+
+        } catch (Exception e) {
+            throw new Exception("Failed to delete purchases of the coupon " + couponId, e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
+    public void deletePurchasesByUser(Long userId) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "DELETE FROM purchases WHERE customer_id = ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, userId);
+
+            //Executing the update
+            int result = preparedStatement.executeUpdate();
+
+            if (result == 0) {
+                throw new ApplicationException(ErrorType.FAILED_DELETE_PURCHASE, "Failed to delete purchases");
+            }
+            System.out.println(result + " Purchases has been successfully deleted from DB");
+
+        } catch (Exception e) {
+            throw new Exception("Failed to delete purchases of the user " + userId, e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
+    public void deletePurchase(Long purchaseId) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "DELETE FROM purchases WHERE id = ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, purchaseId);
+
+            //Executing the update
+            int result = preparedStatement.executeUpdate();
+
+            if (result == 0) {
+                throw new ApplicationException(ErrorType.FAILED_DELETE_PURCHASE, "Failed to delete purchase");
+            }
+            System.out.println(result + " Purchase has been successfully deleted from DB");
+
+        } catch (Exception e) {
+            throw new Exception("Failed to delete purchase " + purchaseId, e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
 
 }

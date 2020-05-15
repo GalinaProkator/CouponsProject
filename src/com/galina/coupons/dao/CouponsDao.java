@@ -288,8 +288,8 @@ public class CouponsDao {
                 coupon.setCouponTitle(resultSet.getString("coupon_title"));
                 coupon.setCategory(CouponCategory.valueOf(resultSet.getString("category")));
                 coupon.setDescription(resultSet.getString("description"));
-                coupon.setStartDate(resultSet.getDate("start_date"));
-                coupon.setEndDate(resultSet.getDate("end_date"));
+                coupon.setStartDate(resultSet.getTimestamp("start_date"));
+                coupon.setEndDate(resultSet.getTimestamp("end_date"));
                 coupon.setAmount(resultSet.getLong("amount"));
                 coupon.setPrice(resultSet.getInt("price"));
                 coupon.setImage(resultSet.getString("image"));

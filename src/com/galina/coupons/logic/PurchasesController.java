@@ -12,30 +12,25 @@ public class PurchasesController {
         this.purchasesDao = new PurchasesDao();
     }
 
-    public void addPurchase (Purchase purchase) throws ApplicationException {
+    public void addPurchase (Purchase purchase) throws Exception {
         purchaseValidations (purchase);
         this.purchasesDao.addPurchase(purchase);
     }
 
-    public void updatePurchase (Purchase purchase) throws ApplicationException {
-        purchaseValidations (purchase);
-        this.purchasesDao.updatePurchase(purchase);
-    }
-
-    public void deletePurchasesByCompany(Long companyId) {
+    public void deletePurchasesByCompany(Long companyId) throws Exception {
         this.purchasesDao.deletePurchasesByCompany(companyId);
     }
 
-    public void deletePurchasesByCoupon(Long couponId) {
+    public void deletePurchasesByCoupon(Long couponId) throws Exception {
         this.purchasesDao.deletePurchasesByCoupon(couponId);
     }
 
-    public void deletePurchasesByCustomer(Long customerId) {
+    public void deletePurchasesByCustomer(Long customerId) throws Exception {
         this.purchasesDao.deletePurchasesByUser(customerId);
     }
 
-    public void deletePurchase(Long customerId, Long companyId) {
-        this.purchasesDao.deletePurchase(customerId, companyId);
+    public void deletePurchase(Long purchaseId) throws Exception {
+        this.purchasesDao.deletePurchase(purchaseId);
     }
 
 
@@ -54,9 +49,6 @@ public class PurchasesController {
         }
         if(purchase.getAmount() <= 0){
             throw new ApplicationException(ErrorType.INVALID_AMOUNT_OF_ITEMS,"Amount must be more than 0");
-        }
-        if(purchase.getTimestamp() == null){
-            throw new ApplicationException(ErrorType.NULL,"A null timestamp");
         }
     }
 
