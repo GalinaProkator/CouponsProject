@@ -1,23 +1,21 @@
 package com.galina.coupons.beans;
 
-import java.time.LocalDate;
-
 public class Purchase {
     private Long id;
     private Long customerId;
-    private Long companyId;
+    private Long couponId;
     private Long amount;
-    private LocalDate timestamp;
+    private java.util.Date timestamp;
 
-    public Purchase(Long customerId, Long companyId, Long amount, LocalDate timestamp) {
+    public Purchase(Long customerId, Long couponId, Long amount, java.util.Date timestamp) {
         this.customerId = customerId;
-        this.companyId = companyId;
+        this.couponId = couponId;
         this.amount = amount;
         this.timestamp = timestamp;
     }
 
-    public Purchase(Long id, Long customerId, Long companyId, Long amount, LocalDate timestamp) {
-        this (customerId, companyId, amount, timestamp);
+    public Purchase(Long id, Long customerId, Long couponId, Long amount, java.util.Date timestamp) {
+        this (customerId, couponId, amount, timestamp);
         this.id = id;
     }
 
@@ -40,12 +38,12 @@ public class Purchase {
         this.customerId = customerId;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public Long getCouponId() {
+        return couponId;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setCouponId(Long couponId) {
+        this.couponId = couponId;
     }
 
     public Long getAmount() {
@@ -56,11 +54,11 @@ public class Purchase {
         this.amount = amount;
     }
 
-    public LocalDate gettimestamp() {
+    public java.util.Date getTimestamp() {
         return timestamp;
     }
 
-    public void settimestamp(LocalDate timestamp) {
+    public void setTimestamp(java.util.Date timestamp) {
         this.timestamp = timestamp;
     }
 }

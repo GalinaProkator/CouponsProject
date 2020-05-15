@@ -4,8 +4,12 @@ import com.galina.coupons.beans.Company;
 import com.galina.coupons.enums.ErrorType;
 import com.galina.coupons.myutils.ApplicationException;
 import com.galina.coupons.myutils.JdbcUtils;
+import com.galina.coupons.myutils.MyUtils;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class CompaniesDao {
 
@@ -180,14 +184,14 @@ public class CompaniesDao {
                 throw new ApplicationException(ErrorType.GENERAL_ERROR, "Cannot retrieve information");
             }
 //getting the number of rows returned to create an array of companies
-            int numberOfRows = getRowCount(resultSet);
-            if (numberOfRows == 0){
+            int numberOfRows = MyUtils.getRowCount(resultSet);
+            if (numberOfRows == 0) {
                 throw new ApplicationException(ErrorType.GENERAL_ERROR, "0 companies in the table");
             }
 //            creating an array of companies
             Company[] companies = new Company[numberOfRows];
             int i = 0;
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 companies[i].setCompanyId(resultSet.getLong("id"));
                 companies[i].setCompanyName(resultSet.getString("company_name"));
                 companies[i].setCompanyEmail(resultSet.getString("company_email"));
@@ -207,28 +211,49 @@ public class CompaniesDao {
         }
     }
 
-    private int getRowCount(ResultSet resultSet) {
-        if (resultSet == null) {
-            return 0;
-        }
+
+    public Company getCompany(long companyId) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
 
         try {
-            resultSet.last();
-            return resultSet.getRow();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                resultSet.beforeFirst();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "SELECT * FROM companies WHERE id = ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, companyId);
+
+            //Executing the update
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                throw new ApplicationException(ErrorType.GENERAL_ERROR, "Cannot retrieve information");
             }
+//            creating an array of companies
+            Company company = new Company();
+            company.setCompanyId(resultSet.getLong("id"));
+            company.setCompanyName(resultSet.getString("company_name"));
+            company.setCompanyEmail(resultSet.getString("company_email"));
+            company.setCompanyPhone(resultSet.getString("company_phone"));
+            company.setCompanyAddress(resultSet.getString("company_address"));
+
+            return company;
+
+        } catch (Exception e) {
+            //			e.printStackTrace();
+            throw new Exception("Failed to retrieve data", e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
         }
-
-        return 0;
     }
-
-
 
     public void deleteCompany(Long companyId) throws Exception {
         //Turn on the connections

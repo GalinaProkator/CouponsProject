@@ -18,7 +18,7 @@ public class CustomersController {
         this.usersController = new UsersController();
     }
 
-    public void addCustomer (Customer customer) throws ApplicationException {
+    public void addCustomer (Customer customer) throws Exception {
         customerValidations (customer);
         customer.getUser().setType(UserType.CUSTOMER);
         this.usersController.addUser(customer.getUser());
@@ -29,26 +29,25 @@ public class CustomersController {
     }
 
 
-    public void updateCustomer (Customer customer) throws ApplicationException {
+    public void updateCustomer (Customer customer) throws Exception {
         customerValidations (customer);
         this.customersDao.updateCustomer(customer);
     }
 
-    public void deleteCustomer(Long customerId) throws ApplicationException {
+    public void deleteCustomer(Long customerId) throws Exception {
         this.purchasesController.deletePurchasesByCustomer(customerId);
         this.usersController.deleteUserByCustomer(customerId);
         this.customersDao.deleteCustomer(customerId);
     }
 
-    private void customerValidations(Customer customer) throws ApplicationException {
+    private void customerValidations(Customer customer) throws Exception {
         if(customer == null){
             throw new ApplicationException(ErrorType.NULL, "A null customer");
         }
         if (this.customersDao.isCustomerEmailExists(customer.getCustomerEmail())){
             throw new ApplicationException(ErrorType.CUSTOMER_EXISTS, "Can't create customer, the email already exists");
         }
-        MyUtils myUtils = new MyUtils();
-        if (!myUtils.isNameValid(customer.getCustomerName())) {
+        if (!MyUtils.isNameValid(customer.getCustomerName())) {
             throw new ApplicationException(ErrorType.INVALID_CUSTOMER_NAME, "Customer name must be between 2-50 characters and contain letters only");
         }
         if(customer.getCustomerName().length() < 2){
@@ -57,7 +56,7 @@ public class CustomersController {
         if(customer.getCustomerName().length() > 50){
             throw new ApplicationException(ErrorType.INVALID_CUSTOMER_NAME, "The customer name is too long, customer name must be between 2-50 characters and contain letters only");
         }
-        if (!myUtils.isEmailValid(customer.getCustomerEmail())){
+        if (!MyUtils.isEmailValid(customer.getCustomerEmail())){
             throw new ApplicationException(ErrorType.INVALID_EMAIL,"The e-mail is not valid");
         }
         if(customer.getCustomerPhone().length() < 7){

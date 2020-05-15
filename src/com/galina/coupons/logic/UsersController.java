@@ -36,8 +36,7 @@ public class UsersController {
         if (user == null) {
             throw new ApplicationException(ErrorType.NULL, "There is no user to add");
         }
-        MyUtils myUtils = new MyUtils();
-        if (!myUtils.isUsernameValid(user.getUserName())) {
+        if (!MyUtils.isUsernameValid(user.getUserName())) {
             throw new ApplicationException(ErrorType.INVALID_EMAIL, "The e-mail is not valid");
         }
         if (user.getPassword().equals("")) {

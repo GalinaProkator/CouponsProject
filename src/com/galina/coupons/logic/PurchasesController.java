@@ -43,7 +43,7 @@ public class PurchasesController {
         if(purchase == null){
             throw new ApplicationException(ErrorType.NULL, "A null purchase");
         }
-        if(purchase.getCompanyId() == null){
+        if(purchase.getCouponId() == null){
             throw new ApplicationException(ErrorType.NULL, "A null company ID");
         }
         if(purchase.getCustomerId() == null){
@@ -55,7 +55,7 @@ public class PurchasesController {
         if(purchase.getAmount() <= 0){
             throw new ApplicationException(ErrorType.INVALID_AMOUNT_OF_ITEMS,"Amount must be more than 0");
         }
-        if(purchase.gettimestamp() == null){
+        if(purchase.getTimestamp() == null){
             throw new ApplicationException(ErrorType.NULL,"A null timestamp");
         }
     }

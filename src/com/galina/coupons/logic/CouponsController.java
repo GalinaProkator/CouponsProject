@@ -57,6 +57,8 @@ public class CouponsController {
         if(coupon.getPrice() < 0){
             throw new ApplicationException(ErrorType.INVALID_PRICE, "The coupon price must be 0 or more");
         }
+//        IMPORTANT!!! there could be an issue with comparing the start date to Calendar. getInstance()
+//        if the server is in another time zone - let's solve it later
         if(!compareTwoDates(coupon.getStartDate(), Calendar. getInstance(). getTime())){
             throw new ApplicationException(ErrorType.INVALID_START_DATE, "Start date has already passed");
         }

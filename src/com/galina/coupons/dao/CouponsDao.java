@@ -1,9 +1,12 @@
 package com.galina.coupons.dao;
 
 import com.galina.coupons.beans.Coupon;
+import com.galina.coupons.beans.CouponConciseFormat;
+import com.galina.coupons.enums.CouponCategory;
 import com.galina.coupons.enums.ErrorType;
 import com.galina.coupons.myutils.ApplicationException;
 import com.galina.coupons.myutils.JdbcUtils;
+import com.galina.coupons.myutils.MyUtils;
 
 import java.sql.*;
 
@@ -206,35 +209,204 @@ public class CouponsDao {
     }
 
 
+    public CouponConciseFormat[] getAllCoupons() throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "SELECT id, company_id, coupon_title, price FROM coupons";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Executing the update
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                throw new ApplicationException(ErrorType.GENERAL_ERROR, "Cannot retrieve information");
+            }
+//              getting the number of rows returned to create an array of coupons
+            int numberOfRows = MyUtils.getRowCount(resultSet);
+            if (numberOfRows == 0) {
+                throw new ApplicationException(ErrorType.GENERAL_ERROR, "0 coupons in the table");
+            }
+//            creating an array of coupons
+            CouponConciseFormat[] coupons = new CouponConciseFormat[numberOfRows];
+            int i = 0;
+            while (resultSet.next()) {
+                coupons[i].setId(resultSet.getLong("id"));
+                coupons[i].setCompanyId(resultSet.getLong("company_id"));
+                coupons[i].setCouponTitle(resultSet.getString("coupon_title"));
+                coupons[i].setPrice(resultSet.getInt("price"));
+                i++;
+            }
+
+            return coupons;
+
+        } catch (Exception e) {
+            //			e.printStackTrace();
+            throw new Exception("Failed to retrieve data", e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
+    public Coupon getCoupon(Long couponId) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "SELECT * FROM coupons WHERE id = ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, couponId);
+
+            //Executing the update
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                throw new ApplicationException(ErrorType.GENERAL_ERROR, "Cannot retrieve information");
+            }
+//            creating a coupon
+            Coupon coupon = new Coupon();
+                coupon.setId(resultSet.getLong("id"));
+                coupon.setCompanyId(resultSet.getLong("company_id"));
+                coupon.setCouponTitle(resultSet.getString("coupon_title"));
+                coupon.setCategory(CouponCategory.valueOf(resultSet.getString("category")));
+                coupon.setDescription(resultSet.getString("description"));
+                coupon.setStartDate(resultSet.getDate("start_date"));
+                coupon.setEndDate(resultSet.getDate("end_date"));
+                coupon.setAmount(resultSet.getLong("amount"));
+                coupon.setPrice(resultSet.getInt("price"));
+                coupon.setImage(resultSet.getString("image"));
+
+            return coupon;
+
+        } catch (Exception e) {
+            //			e.printStackTrace();
+            throw new Exception("Failed to retrieve data", e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
+    public CouponConciseFormat[] getCouponsByMaxPrice(int price) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "SELECT id, company_id, coupon_title, price FROM coupons WHERE price <= ? ORDER BY price";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, price);
+
+            //Executing the update
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                throw new ApplicationException(ErrorType.GENERAL_ERROR, "Cannot retrieve information");
+            }
+//              getting the number of rows returned to create an array of coupons
+            int numberOfRows = MyUtils.getRowCount(resultSet);
+            if (numberOfRows == 0) {
+                throw new ApplicationException(ErrorType.GENERAL_ERROR, "0 coupons in the table");
+            }
+//            creating an array of coupons
+            CouponConciseFormat[] coupons = new CouponConciseFormat[numberOfRows];
+            int i = 0;
+            while (resultSet.next()) {
+                coupons[i].setId(resultSet.getLong("id"));
+                coupons[i].setCompanyId(resultSet.getLong("company_id"));
+                coupons[i].setCouponTitle(resultSet.getString("coupon_title"));
+                coupons[i].setPrice(resultSet.getInt("price"));
+                i++;
+            }
+
+            return coupons;
+
+        } catch (Exception e) {
+            //			e.printStackTrace();
+            throw new Exception("Failed to retrieve data", e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
+    public CouponConciseFormat[] getCouponsByCustomer(long customerId) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "SELECT id, company_id, coupon_title, price " +
+                    "FROM coupons WHERE id IN (SELECT coupon_id FROM purchases WHERE customer_id = ?) " +
+                    "ORDER BY company_id";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setLong(1, customerId);
+
+            //Executing the update
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                throw new ApplicationException(ErrorType.GENERAL_ERROR, "Cannot retrieve information");
+            }
+//              getting the number of rows returned to create an array of coupons
+            int numberOfRows = MyUtils.getRowCount(resultSet);
+            if (numberOfRows == 0) {
+                throw new ApplicationException(ErrorType.GENERAL_ERROR, "0 coupons in the table");
+            }
+//            creating an array of coupons
+            CouponConciseFormat[] coupons = new CouponConciseFormat[numberOfRows];
+            int i = 0;
+            while (resultSet.next()) {
+                coupons[i].setId(resultSet.getLong("id"));
+                coupons[i].setCompanyId(resultSet.getLong("company_id"));
+                coupons[i].setCouponTitle(resultSet.getString("coupon_title"));
+                coupons[i].setPrice(resultSet.getInt("price"));
+                i++;
+            }
+
+            return coupons;
+
+        } catch (Exception e) {
+            //			e.printStackTrace();
+            throw new Exception("Failed to retrieve data", e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
 }
-//    public Coupon[] getAllCoupons() {
-//        LocalDate startDate1 = LocalDate.of(2020, 1, 1);
-//        LocalDate endDate1 = LocalDate.of(2020, 3, 23);
-//        LocalDate startDate2 = LocalDate.of(2020, 1, 1);
-//        LocalDate endDate2 = LocalDate.of(2020, 23, 12);
-//        LocalDate startDate3 = LocalDate.of(2020, 1, 1);
-//        LocalDate endDate3 = LocalDate.of(2020, 31, 12);
-//
-//        Coupon coupon1 = new Coupon(1l,
-//                "Breakfast for two",
-//                CouponCategory.HORECA,
-//                "so tasty",
-//                startDate1,
-//                endDate1,
-//                3234567899l,
-//                123,
-//                "123456789");
-//        Coupon coupon2 = new Coupon(1l, "Elvis never left", CouponCategory.ENTERTAINMENT,
-//                "so good", startDate2, endDate2, 99994999999l, 444, "123456e789");
-//        Coupon coupon3 = new Coupon(1l, "Buy a friend", CouponCategory.GOODS,
-//                "robots are the future", startDate3, endDate3, 99999999959l, 888, "1234567fdg89");
-//
-//        Coupon[] coupons = new Coupon[3];
-//        coupons[0] = coupon1;
-//        coupons[1] = coupon2;
-//        coupons[2] = coupon3;
-//
-//        return coupons;
-//    }
-//
-//

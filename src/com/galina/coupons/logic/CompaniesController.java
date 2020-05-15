@@ -42,14 +42,13 @@ public class CompaniesController {
         if(company == null){
             throw new ApplicationException(ErrorType.NULL, "A null company");
         }
-        MyUtils myUtils = new MyUtils();
-//        if (!myUtils.isNameValid(company.getCompanyName())) {
+//        if (!MyUtils.isNameValid(company.getCompanyName())) {
 //            throw new ApplicationException(ErrorType.INVALID_EMAIL, "The name is not valid");
 //        }
         if (this.companiesDao.isCompanyNameExists(company.getCompanyName())){
             throw new ApplicationException(ErrorType.COMPANY_EXISTS, "Company with such name or e-mail already exists");
         }
-        if (!myUtils.isEmailValid(company.getCompanyEmail())){
+        if (!MyUtils.isEmailValid(company.getCompanyEmail())){
             throw new ApplicationException(ErrorType.INVALID_COMPANY_NAME, "Company name must be between 2-100 characters and contain letters only");
         }
         if (this.companiesDao.isCompanyEmailExists(company.getCompanyEmail())){
