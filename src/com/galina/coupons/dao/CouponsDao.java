@@ -8,7 +8,10 @@ import com.galina.coupons.myutils.ApplicationException;
 import com.galina.coupons.myutils.JdbcUtils;
 import com.galina.coupons.myutils.MyUtils;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class CouponsDao {
 
@@ -29,12 +32,14 @@ public class CouponsDao {
             preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
 
             //Replacing the question marks in the statement above with the relevant data
+            java.sql.Date sqlStartDate = MyUtils.convertUtilToSql(coupon.getStartDate());
+            java.sql.Date sqlEndDate = MyUtils.convertUtilToSql(coupon.getEndDate());
             preparedStatement.setLong(1, coupon.getCompanyId());
             preparedStatement.setString(2, coupon.getCouponTitle());
             preparedStatement.setString(3, coupon.getCategory().getName());
             preparedStatement.setString(4, coupon.getDescription());
-            preparedStatement.setDate(5, (Date) coupon.getStartDate());
-            preparedStatement.setDate(6, (Date) coupon.getEndDate());
+            preparedStatement.setDate(5, sqlStartDate);
+            preparedStatement.setDate(6, sqlEndDate);
             preparedStatement.setLong(7, coupon.getAmount());
             preparedStatement.setInt(8, coupon.getPrice());
             preparedStatement.setString(9, coupon.getImage());
@@ -79,11 +84,13 @@ public class CouponsDao {
             preparedStatement = connection.prepareStatement(sqlStatement);
 
             //Replacing the question marks in the statement above with the relevant data
+            java.sql.Date sqlStartDate = MyUtils.convertUtilToSql(coupon.getStartDate());
+            java.sql.Date sqlEndDate = MyUtils.convertUtilToSql(coupon.getEndDate());
             preparedStatement.setString(1, coupon.getCouponTitle());
             preparedStatement.setString(2, coupon.getCategory().getName());
             preparedStatement.setString(3, coupon.getDescription());
-            preparedStatement.setDate(4, (Date) coupon.getStartDate());
-            preparedStatement.setDate(5, (Date) coupon.getEndDate());
+            preparedStatement.setDate(4, sqlStartDate);
+            preparedStatement.setDate(5, sqlEndDate);
             preparedStatement.setLong(6, coupon.getAmount());
             preparedStatement.setInt(7, coupon.getPrice());
             preparedStatement.setString(8, coupon.getImage());
@@ -160,7 +167,7 @@ public class CouponsDao {
             int result = preparedStatement.executeUpdate();
 
             if (result == 0) {
-                throw new ApplicationException(ErrorType.FAILED_DELETE_COUPON, "Failed to delete coupons");
+                throw new ApplicationException(ErrorType.FAILED_DELETE_COUPON, "0 coupons were deleted");
             }
             System.out.println(result + " Coupons have been successfully deleted from DB");
 
@@ -194,7 +201,7 @@ public class CouponsDao {
             int result = preparedStatement.executeUpdate();
 
             if (result == 0) {
-                throw new ApplicationException(ErrorType.FAILED_DELETE_COUPON, "Failed to delete coupon");
+                throw new ApplicationException(ErrorType.FAILED_DELETE_COUPON, "0 coupons were deleted");
             }
             System.out.println(result + " Coupon has been successfully deleted from DB");
 
@@ -424,13 +431,14 @@ public class CouponsDao {
             preparedStatement = connection.prepareStatement(sqlStatement);
 
             //Replacing the question marks in the statement above with the relevant data
-            preparedStatement.setDate(1, (Date) today);
+            java.sql.Date sqlToday = MyUtils.convertUtilToSql(today);
+            preparedStatement.setDate(1, sqlToday);
 
             //Executing the update
             int result = preparedStatement.executeUpdate();
 
             if (result == 0) {
-                throw new ApplicationException(ErrorType.FAILED_DELETE_COUPON, "Failed to delete coupons");
+                throw new ApplicationException(ErrorType.FAILED_DELETE_COUPON, "0 coupons were deleted");
             }
             System.out.println(result + " Coupons have been successfully deleted from DB");
 

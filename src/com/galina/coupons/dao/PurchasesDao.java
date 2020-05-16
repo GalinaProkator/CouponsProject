@@ -6,7 +6,10 @@ import com.galina.coupons.myutils.ApplicationException;
 import com.galina.coupons.myutils.JdbcUtils;
 import com.galina.coupons.myutils.MyUtils;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Calendar;
 
 public class PurchasesDao {
@@ -28,10 +31,11 @@ public class PurchasesDao {
             preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
 
             //Replacing the question marks in the statement above with the relevant data
+            java.sql.Date sqlNow = MyUtils.convertUtilToSql(Calendar.getInstance().getTime());
             preparedStatement.setLong(1, purchase.getCustomerId());
             preparedStatement.setLong(2, purchase.getCouponId());
             preparedStatement.setLong(3, purchase.getAmount());
-            preparedStatement.setDate(4, (Date) Calendar.getInstance().getTime());
+            preparedStatement.setDate(4, sqlNow);
 
             //Executing the update
             preparedStatement.executeUpdate();
