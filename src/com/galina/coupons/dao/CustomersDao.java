@@ -40,7 +40,7 @@ public class CustomersDao {
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (!resultSet.next()) {
-                throw new ApplicationException(ErrorType.FAILED_CREATE_COMPANY, "Invalid customer key during creation");
+                throw new ApplicationException(ErrorType.FAILED_CREATE_CUSTOMER, "Invalid customer key during creation");
             }
             System.out.println("Customer has been successfully added to DB");
             return resultSet.getLong(1);
@@ -141,7 +141,7 @@ public class CustomersDao {
 
             //Creating the SQL query
             String sqlStatement = "SELECT * FROM customers JOIN users " +
-            "ON customers.id = users.id ";
+                    "ON customers.id = users.id ";
 
             //Combining between the syntax and our connection
             preparedStatement = connection.prepareStatement(sqlStatement);

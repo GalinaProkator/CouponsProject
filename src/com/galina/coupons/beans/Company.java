@@ -1,8 +1,5 @@
 package com.galina.coupons.beans;
 
-/**
- * Added comment1
- */
 public class Company {
     private Long companyId;
     private String companyName;

@@ -11,9 +11,7 @@ import com.galina.coupons.myutils.MyUtils;
 import java.sql.*;
 
 public class CouponsDao {
-    //    public void addCoupon(Coupon coupon) {
-//        System.out.println("Coupon has been successfully added to DB");
-//    }
+
     public long addCoupon(Coupon coupon) throws Exception {
         //Turn on the connections
         Connection connection = null;
@@ -419,6 +417,7 @@ public class CouponsDao {
             connection = JdbcUtils.getConnection();
 
             //Creating the SQL query
+//            there might be an issue with timezones - we'll deal with it later
             String sqlStatement = "DELETE FROM coupons WHERE end_date < ?";
 
             //Combining between the syntax and our connection

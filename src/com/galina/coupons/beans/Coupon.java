@@ -111,6 +111,7 @@ public class Coupon {
     }
 
     public void setImage(String image) {
+
         this.image = image;
     }
 

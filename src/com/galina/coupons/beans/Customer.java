@@ -21,7 +21,6 @@ public class Customer {
     public Customer() {
     }
 
-
     public Long getId() {
         return this.user.getId();
     }

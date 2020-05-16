@@ -130,11 +130,11 @@ public class PurchasesDao {
             }
 
             Purchase purchase = new Purchase();
-                purchase.setId(resultSet.getLong("id"));
-                purchase.setCustomerId(resultSet.getLong("customer_id"));
-                purchase.setCouponId(resultSet.getLong("coupon_id"));
-                purchase.setAmount(resultSet.getLong("amount"));
-                purchase.setTimestamp(resultSet.getTimestamp("timestamp"));
+            purchase.setId(resultSet.getLong("id"));
+            purchase.setCustomerId(resultSet.getLong("customer_id"));
+            purchase.setCouponId(resultSet.getLong("coupon_id"));
+            purchase.setAmount(resultSet.getLong("amount"));
+            purchase.setTimestamp(resultSet.getTimestamp("timestamp"));
 
             return purchase;
 

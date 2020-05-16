@@ -8,7 +8,7 @@ import java.util.TimerTask;
 
 public class Tester {
 
-    public static void main (String [] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 //        UsersController usersController = new UsersController();
 //        User user = new User ("Danny@danny.com", "1234567890123456", UserType.CUSTOMER, null);
 //        usersController.addUser(user);
@@ -24,7 +24,7 @@ public class Tester {
         TimerTask timerTaskDeleteOldCoupons = new TimerTaskDeleteOldCoupons();
         Timer timer = new Timer();
 
-        long oncePerDay = 1000*60*60*24;
+        long oncePerDay = 1000 * 60 * 60 * 24;
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 01);
@@ -33,7 +33,6 @@ public class Tester {
         java.util.Date date = cal.getTime();
 
         timer.schedule(timerTaskDeleteOldCoupons, date, oncePerDay);
-
 
 
     }

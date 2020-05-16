@@ -19,3 +19,4 @@ public class ApplicationException extends Exception {
         return errorType;
     }
 }
+//

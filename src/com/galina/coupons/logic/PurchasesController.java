@@ -12,8 +12,8 @@ public class PurchasesController {
         this.purchasesDao = new PurchasesDao();
     }
 
-    public void addPurchase (Purchase purchase) throws Exception {
-        purchaseValidations (purchase);
+    public void addPurchase(Purchase purchase) throws Exception {
+        purchaseValidations(purchase);
         this.purchasesDao.addPurchase(purchase);
     }
 
@@ -35,23 +35,22 @@ public class PurchasesController {
 
 
     private void purchaseValidations(Purchase purchase) throws ApplicationException {
-        if(purchase == null){
+        if (purchase == null) {
             throw new ApplicationException(ErrorType.NULL, "A null purchase");
         }
-        if(purchase.getCouponId() == null){
+        if (purchase.getCouponId() == null) {
             throw new ApplicationException(ErrorType.NULL, "A null company ID");
         }
-        if(purchase.getCustomerId() == null){
+        if (purchase.getCustomerId() == null) {
             throw new ApplicationException(ErrorType.NULL, "A null customer ID");
         }
-        if(purchase.getAmount() == null){
+        if (purchase.getAmount() == null) {
             throw new ApplicationException(ErrorType.INVALID_AMOUNT_OF_ITEMS, "Amount must be more than 0");
         }
-        if(purchase.getAmount() <= 0){
-            throw new ApplicationException(ErrorType.INVALID_AMOUNT_OF_ITEMS,"Amount must be more than 0");
+        if (purchase.getAmount() <= 0) {
+            throw new ApplicationException(ErrorType.INVALID_AMOUNT_OF_ITEMS, "Amount must be more than 0");
         }
     }
-
 
 
 }

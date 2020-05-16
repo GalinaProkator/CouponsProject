@@ -50,11 +50,10 @@ public class MyUtils {
         return 0;
     }
 
-    public static boolean compareTwoDates(java.util.Date date1, java.util.Date date2){
-        if (date1.compareTo(date2) > 0){
+    public static boolean compareTwoDates(java.util.Date date1, java.util.Date date2) {
+        if (date1.compareTo(date2) > 0) {
             return false; //date1 occurs after date2
-        }
-        else{
+        } else {
             return true; // date1 occurs before date2 or on the same day
         }
     }

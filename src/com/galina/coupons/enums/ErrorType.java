@@ -29,7 +29,6 @@ public enum ErrorType {
     INVALID_PRICE(634, "INVALID_PRICE", "The price must be 0 or more", false),
     INVALID_START_DATE(635, "INVALID_START_DATE", "Start date has already passed", false),
     INVALID_END_DATE(636, "INVALID_END_DATE", "End date cannot be before the start date", false),
-    INVALID_COUPON_CATEGORY(637, "INVALID_COUPON_CATEGORY", "Invalid coupon category", false),
 
     //    Customer errors
     INVALID_CUSTOMER(640, "INVALID_CUSTOMER", "Customer doesn't exists", false),

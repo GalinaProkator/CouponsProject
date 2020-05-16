@@ -29,7 +29,7 @@ public class UsersController {
     }
 
     public void deleteUserByCustomer(Long customerId) throws Exception {
-        this.usersDao.deleteUser (customerId);
+        this.usersDao.deleteUser(customerId);
     }
 
     private void userValidations(User user) throws Exception {

@@ -20,17 +20,17 @@ public class CompaniesController {
     }
 
 
-    public void addCompany (Company company) throws Exception {
-        companyValidations (company);
+    public void addCompany(Company company) throws Exception {
+        companyValidations(company);
         this.companiesDao.addCompany(company);
     }
 
-    public void updateCompany (Company company) throws Exception {
+    public void updateCompany(Company company) throws Exception {
         companyValidations(company);
         this.companiesDao.updateCompany(company);
     }
 
-    public void deleteCompany (Company company) throws Exception {
+    public void deleteCompany(Company company) throws Exception {
         companyValidations(company);
         this.purchasesController.deletePurchasesByCompany(company.getCompanyId());
         this.couponsController.deleteCouponsByCompany(company.getCompanyId());
@@ -39,32 +39,32 @@ public class CompaniesController {
     }
 
     private void companyValidations(Company company) throws Exception {
-        if(company == null){
+        if (company == null) {
             throw new ApplicationException(ErrorType.NULL, "A null company");
         }
 //        if (!MyUtils.isNameValid(company.getCompanyName())) {
 //            throw new ApplicationException(ErrorType.INVALID_EMAIL, "The name is not valid");
 //        }
-        if (this.companiesDao.isCompanyNameExists(company.getCompanyName())){
+        if (this.companiesDao.isCompanyNameExists(company.getCompanyName())) {
             throw new ApplicationException(ErrorType.COMPANY_EXISTS, "Company with such name or e-mail already exists");
         }
-        if (!MyUtils.isEmailValid(company.getCompanyEmail())){
+        if (!MyUtils.isEmailValid(company.getCompanyEmail())) {
             throw new ApplicationException(ErrorType.INVALID_COMPANY_NAME, "Company name must be between 2-100 characters and contain letters only");
         }
-        if (this.companiesDao.isCompanyEmailExists(company.getCompanyEmail())){
+        if (this.companiesDao.isCompanyEmailExists(company.getCompanyEmail())) {
             throw new ApplicationException(ErrorType.COMPANY_EXISTS, "Company with such name or e-mail already exists");
         }
-        if(company.getCompanyName().length() < 2){
+        if (company.getCompanyName().length() < 2) {
             throw new ApplicationException(ErrorType.INVALID_COMPANY_NAME, "The company name is too short, company name must be between 2-100 characters and contain letters only");
         }
-        if(company.getCompanyName().length() > 100){
+        if (company.getCompanyName().length() > 100) {
             throw new ApplicationException(ErrorType.INVALID_COMPANY_NAME, "The company name is too long, company name must be between 2-100 characters and contain letters only");
         }
-        if(company.getCompanyPhone().length() < 7){
+        if (company.getCompanyPhone().length() < 7) {
             throw new ApplicationException(ErrorType.INVALID_PHONE_NUMBER, "The company phone is too short");
         }
-        if(company.getCompanyPhone().length() > 12){
-            throw new ApplicationException(ErrorType.INVALID_PHONE_NUMBER,"The company phone is too long");
+        if (company.getCompanyPhone().length() > 12) {
+            throw new ApplicationException(ErrorType.INVALID_PHONE_NUMBER, "The company phone is too long");
         }
     }
 

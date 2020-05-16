@@ -65,4 +65,15 @@ public class Purchase {
     public void setTimestamp(java.util.Date timestamp) {
         this.timestamp = timestamp;
     }
+
+    @Override
+    public String toString() {
+        return "Purchase{" +
+                "id=" + id +
+                ", customerId=" + customerId +
+                ", couponId=" + couponId +
+                ", amount=" + amount +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

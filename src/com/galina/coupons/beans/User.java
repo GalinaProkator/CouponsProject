@@ -10,8 +10,6 @@ public class User {
     private UserType type;
     private Long companyId;
 
-
-
     public User(String userName, String password, UserType type, Long companyId) {
         this.userName = userName;
         this.password = password;

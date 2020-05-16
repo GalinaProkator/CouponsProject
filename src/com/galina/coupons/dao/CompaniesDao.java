@@ -183,7 +183,7 @@ public class CompaniesDao {
             if (!resultSet.next()) {
                 throw new ApplicationException(ErrorType.GENERAL_ERROR, "Cannot retrieve information");
             }
-//getting the number of rows returned to create an array of companies
+//          getting the number of rows returned to create an array of companies
             int numberOfRows = MyUtils.getRowCount(resultSet);
             if (numberOfRows == 0) {
                 throw new ApplicationException(ErrorType.GENERAL_ERROR, "0 companies in the table");

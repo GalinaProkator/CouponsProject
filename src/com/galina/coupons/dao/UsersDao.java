@@ -202,11 +202,11 @@ public class UsersDao {
             }
 //            creating a user
             User user = new User();
-                user.setId(resultSet.getLong("id"));
-                user.setUserName(resultSet.getString("username"));
-                user.setPassword(resultSet.getString("password"));
-                user.setType(UserType.valueOf(resultSet.getString("type")));
-                user.setCompanyId(resultSet.getLong("company_id"));
+            user.setId(resultSet.getLong("id"));
+            user.setUserName(resultSet.getString("username"));
+            user.setPassword(resultSet.getString("password"));
+            user.setType(UserType.valueOf(resultSet.getString("type")));
+            user.setCompanyId(resultSet.getLong("company_id"));
 
             return user;
 
@@ -241,7 +241,7 @@ public class UsersDao {
             int result = preparedStatement.executeUpdate();
 
             if (result == 0) {
-                throw new ApplicationException(ErrorType.FAILED_DELETE_COMPANY, "Failed to delete users");
+                throw new ApplicationException(ErrorType.FAILED_DELETE_USER, "Failed to delete users");
             }
             System.out.println(result + " Users have been successfully deleted from DB");
 
@@ -275,7 +275,7 @@ public class UsersDao {
             int result = preparedStatement.executeUpdate();
 
             if (result == 0) {
-                throw new ApplicationException(ErrorType.FAILED_DELETE_COMPANY, "Failed to delete user");
+                throw new ApplicationException(ErrorType.FAILED_DELETE_USER, "Failed to delete user");
             }
             System.out.println(result + " User has  been successfully deleted from DB");
 
