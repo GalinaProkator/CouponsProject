@@ -283,16 +283,16 @@ public class CouponsDao {
             }
 //            creating a coupon
             Coupon coupon = new Coupon();
-                coupon.setId(resultSet.getLong("id"));
-                coupon.setCompanyId(resultSet.getLong("company_id"));
-                coupon.setCouponTitle(resultSet.getString("coupon_title"));
-                coupon.setCategory(CouponCategory.valueOf(resultSet.getString("category")));
-                coupon.setDescription(resultSet.getString("description"));
-                coupon.setStartDate(resultSet.getTimestamp("start_date"));
-                coupon.setEndDate(resultSet.getTimestamp("end_date"));
-                coupon.setAmount(resultSet.getLong("amount"));
-                coupon.setPrice(resultSet.getInt("price"));
-                coupon.setImage(resultSet.getString("image"));
+            coupon.setId(resultSet.getLong("id"));
+            coupon.setCompanyId(resultSet.getLong("company_id"));
+            coupon.setCouponTitle(resultSet.getString("coupon_title"));
+            coupon.setCategory(CouponCategory.valueOf(resultSet.getString("category")));
+            coupon.setDescription(resultSet.getString("description"));
+            coupon.setStartDate(resultSet.getTimestamp("start_date"));
+            coupon.setEndDate(resultSet.getTimestamp("end_date"));
+            coupon.setAmount(resultSet.getLong("amount"));
+            coupon.setPrice(resultSet.getInt("price"));
+            coupon.setImage(resultSet.getString("image"));
 
             return coupon;
 
@@ -408,5 +408,40 @@ public class CouponsDao {
             JdbcUtils.closeResources(connection, preparedStatement);
         }
     }
+
+    public void removeOldCoupons(java.util.Date today) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "DELETE FROM coupons WHERE end_date < ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setDate(1, (Date) today);
+
+            //Executing the update
+            int result = preparedStatement.executeUpdate();
+
+            if (result == 0) {
+                throw new ApplicationException(ErrorType.FAILED_DELETE_COUPON, "Failed to delete coupons");
+            }
+            System.out.println(result + " Coupons have been successfully deleted from DB");
+
+        } catch (Exception e) {
+            throw new Exception("Failed to delete coupons before with due date before" + today, e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
 
 }

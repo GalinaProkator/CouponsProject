@@ -4,6 +4,7 @@ import com.galina.coupons.beans.Coupon;
 import com.galina.coupons.dao.CouponsDao;
 import com.galina.coupons.enums.ErrorType;
 import com.galina.coupons.myutils.ApplicationException;
+import com.galina.coupons.myutils.MyUtils;
 
 import java.util.Calendar;
 
@@ -59,20 +60,13 @@ public class CouponsController {
         }
 //        IMPORTANT!!! there could be an issue with comparing the start date to Calendar. getInstance()
 //        if the server is in another time zone - let's solve it later
-        if(!compareTwoDates(coupon.getStartDate(), Calendar. getInstance(). getTime())){
+        if(!MyUtils.compareTwoDates(coupon.getStartDate(), Calendar. getInstance(). getTime())){
             throw new ApplicationException(ErrorType.INVALID_START_DATE, "Start date has already passed");
         }
-        if(!compareTwoDates(coupon.getStartDate(), coupon.getEndDate())){
+        if(!MyUtils.compareTwoDates(coupon.getStartDate(), coupon.getEndDate())){
             throw new ApplicationException(ErrorType.INVALID_END_DATE, "End date cannot be before the start date");
         }
     }
 
-    public boolean compareTwoDates (java.util.Date date1, java.util.Date date2){
-        if (date1.compareTo(date2) > 0){
-            return false; //date1 occurs after date2
-        }
-        else{
-            return true; // date1 occurs before date2 or on the same day
-        }
-    }
+
 }
