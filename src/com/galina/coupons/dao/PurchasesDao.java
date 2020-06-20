@@ -5,6 +5,7 @@ import com.galina.coupons.enums.ErrorType;
 import com.galina.coupons.myutils.ApplicationException;
 import com.galina.coupons.myutils.JdbcUtils;
 import com.galina.coupons.myutils.MyUtils;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Calendar;
 
+@Repository
 public class PurchasesDao {
 
     public long addPurchase(Purchase purchase) throws Exception {

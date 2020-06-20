@@ -1,19 +1,22 @@
 package com.galina.coupons.dao;
 
-import com.galina.coupons.beans.User;
+import com.galina.coupons.beans.PostLoginData;
+import com.galina.coupons.beans.UserEntity;
 import com.galina.coupons.enums.ErrorType;
 import com.galina.coupons.enums.UserType;
 import com.galina.coupons.myutils.ApplicationException;
 import com.galina.coupons.myutils.JdbcUtils;
 import com.galina.coupons.myutils.MyUtils;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+@Repository
 public class UsersDao {
-    public long addUser(User user) throws Exception {
+    public long addUser(String username, String hashedPassword, UserType type, Long company_id) throws Exception {
         //Turn on the connections
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -30,10 +33,10 @@ public class UsersDao {
             preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
 
             //Replacing the question marks in the statement above with the relevant data
-            preparedStatement.setString(1, user.getUserName());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, String.valueOf(user.getType()));
-            preparedStatement.setLong(4, user.getCompanyId());
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, hashedPassword);
+            preparedStatement.setString(3, String.valueOf(type));
+            preparedStatement.setLong(4, company_id);
 
             //Executing the update
             preparedStatement.executeUpdate();
@@ -50,14 +53,14 @@ public class UsersDao {
             //If there was an exception in the "try" block above, it is caught here and notifies a level above.
             //			throw new ApplicationException(e, ErrorType.GENERAL_ERROR, DateUtils.getCurrentDateAndTime()
             //					+" Create company failed");
-            throw new Exception("Failed to create user " + user.toString(), e);
+            throw new Exception("Failed to create user " + new UserEntity(username, hashedPassword, type, company_id).toString(), e);
         } finally {
             //Closing the resources
             JdbcUtils.closeResources(connection, preparedStatement);
         }
     }
 
-    public void updateUser(User user) throws Exception {
+    public void updateUser(String hashedPassword, long userId) throws Exception {
         //Turn on the connections
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -74,8 +77,8 @@ public class UsersDao {
             preparedStatement = connection.prepareStatement(sqlStatement);
 
             //Replacing the question marks in the statement above with the relevant data
-            preparedStatement.setString(1, user.getPassword());
-            preparedStatement.setLong(2, user.getId());
+            preparedStatement.setString(1, hashedPassword);
+            preparedStatement.setLong(2, userId);
 
             //Executing the update
             int result = preparedStatement.executeUpdate();
@@ -87,7 +90,7 @@ public class UsersDao {
 
         } catch (Exception e) {
             //			e.printStackTrace();
-            throw new Exception("Failed to update user " + user.toString(), e);
+            throw new Exception("Failed to update user ", e);
         } finally {
             //Closing the resources
             JdbcUtils.closeResources(connection, preparedStatement);
@@ -127,7 +130,7 @@ public class UsersDao {
         }
     }
 
-    public User[] getAllUsers() throws Exception {
+    public UserEntity[] getAllUsers() throws Exception {
         //Turn on the connections
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -154,18 +157,18 @@ public class UsersDao {
                 throw new ApplicationException(ErrorType.GENERAL_ERROR, "0 companies in the table");
             }
 //            creating an array of companies
-            User[] users = new User[numberOfRows];
+            UserEntity[] userEntities = new UserEntity[numberOfRows];
             int i = 0;
             while (resultSet.next()) {
-                users[i].setId(resultSet.getLong("id"));
-                users[i].setUserName(resultSet.getString("username"));
-                users[i].setPassword(resultSet.getString("password"));
-                users[i].setType(UserType.valueOf(resultSet.getString("type")));
-                users[i].setCompanyId(resultSet.getLong("company_id"));
+                userEntities[i].setId(resultSet.getLong("id"));
+                userEntities[i].setUserName(resultSet.getString("username"));
+                userEntities[i].setPassword(resultSet.getString("password"));
+                userEntities[i].setType(UserType.valueOf(resultSet.getString("type")));
+                userEntities[i].setCompanyId(resultSet.getLong("company_id"));
                 i++;
             }
 
-            return users;
+            return userEntities;
 
         } catch (Exception e) {
             //			e.printStackTrace();
@@ -176,7 +179,7 @@ public class UsersDao {
         }
     }
 
-    public User getUser(long userId) throws Exception {
+    public UserEntity getUser(long userId) throws Exception {
         //Turn on the connections
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -201,14 +204,14 @@ public class UsersDao {
                 throw new ApplicationException(ErrorType.GENERAL_ERROR, "Cannot retrieve information");
             }
 //            creating a user
-            User user = new User();
-            user.setId(resultSet.getLong("id"));
-            user.setUserName(resultSet.getString("username"));
-            user.setPassword(resultSet.getString("password"));
-            user.setType(UserType.valueOf(resultSet.getString("type")));
-            user.setCompanyId(resultSet.getLong("company_id"));
+            UserEntity userEntity = new UserEntity();
+            userEntity.setId(resultSet.getLong("id"));
+            userEntity.setUserName(resultSet.getString("username"));
+            userEntity.setPassword(resultSet.getString("password"));
+            userEntity.setType(UserType.valueOf(resultSet.getString("type")));
+            userEntity.setCompanyId(resultSet.getLong("company_id"));
 
-            return user;
+            return userEntity;
 
         } catch (Exception e) {
             //			e.printStackTrace();
@@ -287,4 +290,47 @@ public class UsersDao {
         }
     }
 
+    public PostLoginData login(String username, String password) throws Exception {
+        //Turn on the connections
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //Establish a connection from the connection manager
+            connection = JdbcUtils.getConnection();
+
+            //Creating the SQL query
+            String sqlStatement = "SELECT * FROM users WHERE username = ? AND password = ?";
+
+            //Combining between the syntax and our connection
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Replacing the question marks in the statement above with the relevant data
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+
+            //Executing the update
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                throw new ApplicationException(ErrorType.INVALID_LOGIN_DETAILS, "Invalid username or password");
+            }
+//            creating a postLoginData
+            PostLoginData postLoginData = new PostLoginData();
+            postLoginData.setId(resultSet.getLong("id"));
+            postLoginData.setUserType(UserType.valueOf(resultSet.getString("type")));
+            postLoginData.setCompanyId(resultSet.getLong("company_id"));
+
+            return postLoginData;
+
+
+        } catch (Exception e) {
+            throw new Exception("Query failed", e);
+        } finally {
+            //Closing the resources
+            JdbcUtils.closeResources(connection, preparedStatement);
+        }
+    }
+
 }
+

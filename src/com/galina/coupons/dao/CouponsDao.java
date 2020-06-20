@@ -7,12 +7,14 @@ import com.galina.coupons.enums.ErrorType;
 import com.galina.coupons.myutils.ApplicationException;
 import com.galina.coupons.myutils.JdbcUtils;
 import com.galina.coupons.myutils.MyUtils;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+@Repository
 public class CouponsDao {
 
     public long addCoupon(Coupon coupon) throws Exception {

@@ -1,19 +1,21 @@
 package com.galina.coupons.dao;
 
-import com.galina.coupons.beans.Company;
+import com.galina.coupons.beans.CompanyEntity;
 import com.galina.coupons.enums.ErrorType;
 import com.galina.coupons.myutils.ApplicationException;
 import com.galina.coupons.myutils.JdbcUtils;
 import com.galina.coupons.myutils.MyUtils;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+@Repository
 public class CompaniesDao {
 
-    public long addCompany(Company company) throws Exception {
+    public long addCompany(CompanyEntity companyEntity) throws Exception {
         //Turn on the connections
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -30,10 +32,10 @@ public class CompaniesDao {
             preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
 
             //Replacing the question marks in the statement above with the relevant data
-            preparedStatement.setString(1, company.getCompanyName());
-            preparedStatement.setString(2, company.getCompanyEmail());
-            preparedStatement.setString(3, company.getCompanyPhone());
-            preparedStatement.setString(4, company.getCompanyAddress());
+            preparedStatement.setString(1, companyEntity.getCompanyName());
+            preparedStatement.setString(2, companyEntity.getCompanyEmail());
+            preparedStatement.setString(3, companyEntity.getCompanyPhone());
+            preparedStatement.setString(4, companyEntity.getCompanyAddress());
 
             //Executing the update
             preparedStatement.executeUpdate();
@@ -50,14 +52,14 @@ public class CompaniesDao {
             //If there was an exception in the "try" block above, it is caught here and notifies a level above.
             //			throw new ApplicationException(e, ErrorType.GENERAL_ERROR, DateUtils.getCurrentDateAndTime()
             //					+" Create company failed");
-            throw new Exception("Failed to create company " + company.toString(), e);
+            throw new Exception("Failed to create company " + companyEntity.toString(), e);
         } finally {
             //Closing the resources
             JdbcUtils.closeResources(connection, preparedStatement);
         }
     }
 
-    public void updateCompany(Company company) throws Exception {
+    public void updateCompany(CompanyEntity companyEntity) throws Exception {
         //Turn on the connections
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -73,11 +75,11 @@ public class CompaniesDao {
             preparedStatement = connection.prepareStatement(sqlStatement);
 
             //Replacing the question marks in the statement above with the relevant data
-            preparedStatement.setString(1, company.getCompanyName());
-            preparedStatement.setString(2, company.getCompanyEmail());
-            preparedStatement.setString(3, company.getCompanyPhone());
-            preparedStatement.setString(4, company.getCompanyAddress());
-            preparedStatement.setLong(5, company.getCompanyId());
+            preparedStatement.setString(1, companyEntity.getCompanyName());
+            preparedStatement.setString(2, companyEntity.getCompanyEmail());
+            preparedStatement.setString(3, companyEntity.getCompanyPhone());
+            preparedStatement.setString(4, companyEntity.getCompanyAddress());
+            preparedStatement.setLong(5, companyEntity.getCompanyId());
 
             //Executing the update
             int result = preparedStatement.executeUpdate();
@@ -89,7 +91,7 @@ public class CompaniesDao {
 
         } catch (Exception e) {
             //			e.printStackTrace();
-            throw new Exception("Failed to update company " + company.toString(), e);
+            throw new Exception("Failed to update company " + companyEntity.toString(), e);
         } finally {
             //Closing the resources
             JdbcUtils.closeResources(connection, preparedStatement);
@@ -162,7 +164,7 @@ public class CompaniesDao {
         }
     }
 
-    public Company[] getAllCompanies() throws Exception {
+    public CompanyEntity[] getAllCompanies() throws Exception {
         //Turn on the connections
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -189,7 +191,7 @@ public class CompaniesDao {
                 throw new ApplicationException(ErrorType.GENERAL_ERROR, "0 companies in the table");
             }
 //            creating an array of companies
-            Company[] companies = new Company[numberOfRows];
+            CompanyEntity[] companies = new CompanyEntity[numberOfRows];
             int i = 0;
             while (resultSet.next()) {
                 companies[i].setCompanyId(resultSet.getLong("id"));
@@ -212,7 +214,7 @@ public class CompaniesDao {
     }
 
 
-    public Company getCompany(long companyId) throws Exception {
+    public CompanyEntity getCompany(long companyId) throws Exception {
         //Turn on the connections
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -237,14 +239,14 @@ public class CompaniesDao {
                 throw new ApplicationException(ErrorType.GENERAL_ERROR, "Cannot retrieve information");
             }
 //            creating an array of companies
-            Company company = new Company();
-            company.setCompanyId(resultSet.getLong("id"));
-            company.setCompanyName(resultSet.getString("company_name"));
-            company.setCompanyEmail(resultSet.getString("company_email"));
-            company.setCompanyPhone(resultSet.getString("company_phone"));
-            company.setCompanyAddress(resultSet.getString("company_address"));
+            CompanyEntity companyEntity = new CompanyEntity();
+            companyEntity.setCompanyId(resultSet.getLong("id"));
+            companyEntity.setCompanyName(resultSet.getString("company_name"));
+            companyEntity.setCompanyEmail(resultSet.getString("company_email"));
+            companyEntity.setCompanyPhone(resultSet.getString("company_phone"));
+            companyEntity.setCompanyAddress(resultSet.getString("company_address"));
 
-            return company;
+            return companyEntity;
 
         } catch (Exception e) {
             //			e.printStackTrace();

@@ -6,12 +6,14 @@ import com.galina.coupons.enums.UserType;
 import com.galina.coupons.myutils.ApplicationException;
 import com.galina.coupons.myutils.JdbcUtils;
 import com.galina.coupons.myutils.MyUtils;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+@Repository
 public class CustomersDao {
 
     public long addCustomer(Customer customer) throws Exception {
@@ -162,9 +164,9 @@ public class CustomersDao {
             int i = 0;
             while (resultSet.next()) {
                 customers[i].setId(resultSet.getLong("id"));
-                customers[i].getUser().setUserName(resultSet.getString("username"));
-                customers[i].getUser().setPassword(resultSet.getString("password"));
-                customers[i].getUser().setType(UserType.CUSTOMER);
+                customers[i].getUserEntity().setUserName(resultSet.getString("username"));
+                customers[i].getUserEntity().setPassword(resultSet.getString("password"));
+                customers[i].getUserEntity().setType(UserType.CUSTOMER);
                 customers[i].setCustomerName(resultSet.getString("customer_name"));
                 customers[i].setCustomerEmail(resultSet.getString("customer_email"));
                 customers[i].setCustomerPhone(resultSet.getString("customer_phone"));
@@ -211,9 +213,9 @@ public class CustomersDao {
 //            creating customer
             Customer customer = new Customer();
             customer.setId(resultSet.getLong("id"));
-            customer.getUser().setUserName(resultSet.getString("username"));
-            customer.getUser().setPassword(resultSet.getString("password"));
-            customer.getUser().setType(UserType.CUSTOMER);
+            customer.getUserEntity().setUserName(resultSet.getString("username"));
+            customer.getUserEntity().setPassword(resultSet.getString("password"));
+            customer.getUserEntity().setType(UserType.CUSTOMER);
             customer.setCustomerName(resultSet.getString("customer_name"));
             customer.setCustomerEmail(resultSet.getString("customer_email"));
             customer.setCustomerPhone(resultSet.getString("customer_phone"));
@@ -228,6 +230,7 @@ public class CustomersDao {
             JdbcUtils.closeResources(connection, preparedStatement);
         }
     }
+
 
     public void deleteCustomer(Long customerId) throws Exception {
         //Turn on the connections
